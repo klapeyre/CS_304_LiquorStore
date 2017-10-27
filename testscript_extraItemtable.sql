@@ -34,12 +34,16 @@ create table stores (
 
 grant select on stores to public;
 
+commit;
+
 create table items (
     sku int not null,
     name varchar(30),
     primary key (sku));
 
 grant select on items to public;
+
+commit;
 
 create table beers (
     sku int not null,
@@ -57,6 +61,8 @@ create table beers (
     foreign key (sku) references items);
 
 grant select on beers to public;
+
+commit;
 
 create table wines (
     sku int not null,
@@ -76,6 +82,8 @@ create table wines (
 
 grant select on wines to public;
 
+commit;
+
 create table nonalcoholicitems (
     sku int not null,
     name varchar(30),
@@ -88,6 +96,8 @@ create table nonalcoholicitems (
 
 grant select on nonalcoholicitems to public;
 
+commit;
+
 create table storeitems (
     sku int not null,
     store_id int not null,
@@ -97,6 +107,8 @@ create table storeitems (
     foreign key (store_id) references stores);
 
 grant select on storeitems to public;
+
+commit;
 
 create table employees (
     employee_id int not null,
@@ -111,6 +123,8 @@ create table employees (
 
 grant select on employees to public;
 
+commit;
+
 create table orders (
     order_number int not null,
     supplier varchar(20),
@@ -124,6 +138,8 @@ create table orders (
 
 grant select on orders to public;
 
+commit;
+
 create table orderitems (
     sku int not null,
     order_number int not null,
@@ -132,6 +148,8 @@ create table orderitems (
     foreign key (sku) references items);
 
 grant select on orderitems to public;
+
+commit;
 
 create table sales (
     sale_number int not null,
@@ -145,6 +163,8 @@ create table sales (
 
 grant select on sales to public;
 
+commit;
+
 create table saleitems (
     sku int not null,
     sale_number int not null,
@@ -155,6 +175,8 @@ create table saleitems (
 
 grant select on saleitems to public;
 
+commit;
+
 create table reports (
     report_id int not null,
     start_date date,
@@ -164,6 +186,8 @@ create table reports (
     foreign key (store_id) references stores);
 
 grant select on reports to public;
+
+commit;
 
 create table reportamounts (
     store_id int not null,
@@ -176,6 +200,8 @@ create table reportamounts (
     foreign key (store_id) references stores);
 
 grant select on reportamounts to public;
+
+commit;
 
 -- I still need to add ON UPDATE, ON DELETE rules to tables and finish populating sample data
 
@@ -195,6 +221,8 @@ insert into storeitems values (501, 1, 10);
 insert into storeitems values (502, 1, 10);
 insert into storeitems values (503, 1, 10);
 insert into storeitems values (504, 1, 10);
+
+commit;
 
 
 
