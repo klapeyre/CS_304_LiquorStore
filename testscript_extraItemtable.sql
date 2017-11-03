@@ -16,8 +16,6 @@ drop table sales;
 -- cascade delete from employee
 drop table saleitems;
 -- cascade delete from sale
-drop table nonalcoholicitems;
--- no dependencies
 drop table beers;
 -- no dependencies
 drop table wines;
