@@ -39,6 +39,10 @@ commit;
 create table items (
     sku int not null,
     name varchar(30),
+    tax double precision,
+    deposit double precision,
+    price double precision,
+    description varchar(50),
     primary key (sku));
 
 grant select on items to public;
@@ -47,10 +51,6 @@ commit;
 
 create table beers (
     sku int not null,
-    tax double precision,
-    deposit double precision,
-    price double precision,
-    description varchar(50),
     company varchar(30),
     region varchar(30),
     alcohol_percentage double precision,
@@ -58,7 +58,7 @@ create table beers (
     volume int,
     pack_quantity int,
     primary key (sku),
-    foreign key (sku) references items);
+    foreign key (sku) references items on delete cascade on update cascade);
 
 grant select on beers to public;
 
@@ -66,11 +66,6 @@ commit;
 
 create table wines (
     sku int not null,
-    name varchar(30),
-    tax double precision,
-    deposit double precision,
-    price double precision,
-    description varchar(50),
     company varchar(30),
     region varchar(30),
     alcohol_percentage double precision,
@@ -78,23 +73,9 @@ create table wines (
     volume int,
     subtype varchar(20),
     primary key (sku),
-    foreign key (sku) references items);
+    foreign key (sku) references items on delete cascade on update cascade);
 
 grant select on wines to public;
-
-commit;
-
-create table nonalcoholicitems (
-    sku int not null,
-    name varchar(30),
-    tax double precision,
-    deposit double precision,
-    price double precision,
-    description varchar(50),
-    primary key (sku),
-    foreign key (sku) references items);
-
-grant select on nonalcoholicitems to public;
 
 commit;
 
@@ -103,8 +84,8 @@ create table storeitems (
     store_id int not null,
     stock_quantity int,
     primary key (sku, store_id),
-    foreign key (sku) references items,
-    foreign key (store_id) references stores);
+    foreign key (sku) references items on delete cascade on update cascade,
+    foreign key (store_id) references stores on delete cascade on update cascade);
 
 grant select on storeitems to public;
 
@@ -119,7 +100,7 @@ create table employees (
     store_id int not null,
     type int,
     primary key (employee_id),
-    foreign key (store_id) references stores);
+    foreign key (store_id) references stores on delete no action on update cascade);
 
 grant select on employees to public;
 
@@ -134,7 +115,7 @@ create table orders (
     date_received date,
     employee_id int not null,
     primary key (order_number),
-    foreign key (employee_id) references employees);
+    foreign key (employee_id) references employees on delete no action on update cascade);
 
 grant select on orders to public;
 
@@ -145,7 +126,8 @@ create table orderitems (
     order_number int not null,
     quantity int,
     primary key (sku, order_number),
-    foreign key (sku) references items);
+    foreign key (sku) references items on delete no action on update no action,
+    foreign key (order_number) references orders on delete set null on update cascade);
 
 grant select on orderitems to public;
 
@@ -159,7 +141,7 @@ create table sales (
     date date,
     employee_id int not null,
     primary key (sale_number),
-    foreign key (employee_id) references employee);
+    foreign key (employee_id) references employee on delete no action on update no action);
 
 grant select on sales to public;
 
@@ -170,8 +152,8 @@ create table saleitems (
     sale_number int not null,
     quantity int,
     primary key (sku, sale_number),
-    foreign key (sku) references items,
-    foreign key (sale_number) references sales);
+    foreign key (sku) references items on delete no action on update no action,
+    foreign key (sale_number) references sales on delete set null on update cascade);
 
 grant select on saleitems to public;
 
@@ -183,7 +165,7 @@ create table reports (
     end_date date,
     store_id int not null,
     primary key (report_id),
-    foreign key (store_id) references stores);
+    foreign key (store_id) references stores on delete no action on update cascade);
 
 grant select on reports to public;
 
@@ -197,13 +179,15 @@ create table reportamounts (
     total_orders double precision,
     total_wages double precision,
     primary key (store_id, start_date, end_date),
-    foreign key (store_id) references stores);
+    foreign key (store_id) references stores on delete no action on update cascade,
+    foreign key (start_date) references reports,
+    foreign key (end_date) references reports);
 
 grant select on reportamounts to public;
 
 commit;
 
--- I still need to add ON UPDATE, ON DELETE rules to tables and finish populating sample data
+-- I still need to finish populating sample data
 
 insert into stores values (1, '123 Fake Street', 'Our Private Store', '604-123-4567');
 insert into items values (500, 'GI Lager');
