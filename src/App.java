@@ -6,7 +6,7 @@ public class App {
     public static void main(String[] args) {
         System.out.print("Hello World ____________");
      //   Database database = new Database();
-        JFrame frame = new JFrame("View");
+        JFrame frame = new JFrame("Cool App");
         frame.setContentPane(new MainScreen().getPanelMain());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -22,7 +22,7 @@ public class App {
 //        f.add(p);
 //        f.setVisible(true);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -3,6 +3,8 @@ package View;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import View.EmployeeManagement;
+import View.StockManagement;
 
 public class MainScreen {
     private JButton manageStockButton;
@@ -20,13 +22,29 @@ public class MainScreen {
         manageStockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Hello World");
+                JFrame frame = new JFrame("Stock Management");
+                frame.setContentPane(new StockManagement().getPanelSM());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
         searchStockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        manageEmployeesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    JFrame frame = new JFrame("Employee Management");
+                    frame.setContentPane(new EmployeeManagement().getPanelEM());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
             }
         });
     }
