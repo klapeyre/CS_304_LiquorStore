@@ -136,26 +136,13 @@ create table reports (
     st_date timestamp,
     end_date timestamp,
     store_id int not null,
+    total_sales double precision,
+    total_orders double precision,
+    total_wages double precision,
     primary key (report_id),
     foreign key (store_id) references stores);
 
 grant select on reports to public;
-
-commit;
-
-create table reportamounts (
-    store_id int not null,
-    st_date timestamp,
-    end_date timestamp,
-    total_sales double precision,
-    total_orders double precision,
-    total_wages double precision,
-    primary key (store_id, st_date, end_date),
-    foreign key (store_id) references reports,
-    foreign key (st_date) references reports,
-    foreign key (end_date) references reports);
-
-grant select on reportamounts to public;
 
 commit;
 
