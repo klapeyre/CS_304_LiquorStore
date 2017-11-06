@@ -30,20 +30,22 @@ public class StockManagement {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameTextField.getText();
-                String tax = taxTextField.getText(); //TODO change to number
-                String deposit = depositTextField.getText(); //TODO change to number
-                String price = priceTextFieldTextField.getText(); //TODO change to number
+                double tax = Double.parseDouble(taxTextField.getText());
+                double deposit = Double.parseDouble(depositTextField.getText());
+                double price = Double.parseDouble(priceTextFieldTextField.getText());
                 String description = descriptionTextField.getText();
                 String storeID = storeIDTextField.getText();
-                String percentage = alcoholPercentageTextField.getText(); //TODO change to number
+                double percentage = Double.parseDouble(alcoholPercentageTextField.getText());
                 String type = typeTextField.getText();
                 String region = regionTextField.getText();
                 String company = companyTextField.getText();
-                String quantity = quantityTextField.getText(); //TODO change to number
+                int quantity = Integer.parseInt(quantityTextField.getText());
+
                 System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+storeID+" "+percentage+" "+type+" "+region+" "+company+" "+quantity);
+                // TODO instantiate a ManageStock object here, using input data obtained from GUI
 
                 if (beerRadioButton.isSelected()){
-                    String packQuantity = packQuantityTextField.getText(); //TODO change to number
+                    int packQuantity = Integer.parseInt(packQuantityTextField.getText());
                     //TODO insert beer
                     //insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
                     //TODO check if everything was fine then

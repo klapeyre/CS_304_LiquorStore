@@ -15,7 +15,7 @@ public class DatabaseConnection {
         try {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1522:ug", username, password);
+                    "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug", username, password);
             statement = conn.createStatement();
             System.out.println("Connection works!");
         } catch (SQLException e) {
