@@ -146,9 +146,6 @@ grant select on reports to public;
 
 commit;
 
--- I still need to finish populating sample data
-
-commit;
 
 
 
