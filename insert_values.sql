@@ -28,7 +28,7 @@ insert into items values (1018,'Johhny Q Shiraz',0.15,0.05,22.70,'Johhny Q Shira
 insert into items values (1019,'JT Merlot',0.15,0.05,14.50,'Jackson Triggs Merlot');
 insert into items values (1020,'JT Cabernet Sauvignon',0.15,0.05,14.50,'Jackson Triggs Cab Sauv');
 insert into items values (1021,'Coke 2L',0.15,0.20,4.00,'Coke 2L');
-insert into items values (1022,'Tonic Water',0.15,0.05,1.25,'Canada Dry Tonic Water');
+insert into items values (1022,'Tonic Water 355mL',0.15,0.05,1.25,'Canada Dry Tonic Water');
 insert into items values (1023,'Doritos',0.12,0.00,5.00,'Doritos Nacho Cheese Flavor');
 insert into items values (1024,'Doritos Cool Ranch',0.12,0.00,5.00,'Doritos Cool Ranch');
 
@@ -60,5 +60,74 @@ insert into wines values (1019,'Jackson Triggs','Okanagan,BC',12.0,'Red',750,'Me
 insert into wines values (1020,'Jackson Triggs','Okanagan,BC',12.0,'Red',750,'Cabernet Sauvignon');
 
 commit;
+
+insert into storeitems values (1000,1,20);
+insert into storeitems values (1001,1,20);
+insert into storeitems values (1002,1,20);
+insert into storeitems values (1003,1,20);
+insert into storeitems values (1004,1,20);
+insert into storeitems values (1005,1,20);
+insert into storeitems values (1006,1,48);
+insert into storeitems values (1007,1,48);
+insert into storeitems values (1008,1,24);
+insert into storeitems values (1009,1,24);
+insert into storeitems values (1010,1,12);
+insert into storeitems values (1011,1,24);
+insert into storeitems values (1012,1,24);
+insert into storeitems values (1013,1,24);
+insert into storeitems values (1014,1,24);
+insert into storeitems values (1015,1,24);
+insert into storeitems values (1016,1,16);
+insert into storeitems values (1017,1,24);
+insert into storeitems values (1018,1,12);
+insert into storeitems values (1019,1,24);
+insert into storeitems values (1020,1,24);
+insert into storeitems values (1021,1,4);
+insert into storeitems values (1022,1,6);
+insert into storeitems values (1023,1,5);
+insert into storeitems values (1024,1,5);
+
+commit;
+
+insert into employees values (1,'John Manage','jmanage','password1',100.00,1,1);
+insert into employees values (3,'Michael C','mc','password3',70.00,1,2);
+
+commit;
+
+-- orders and sales should have timestamps. Then the report can choose a DATE range, and any timestamps that fall in that range would 
+-- be collected
+
+insert into orders values (100,'Granville Island','2017-10-30 10:00','2017-10-31 11:00',1);
+insert into orders values (101,'Superflux','2017-11-08 10:00',null,1);
+
+commit;
+
+insert into orderitems values (1002,100,4);
+insert into orderitems values (1003,100,4);
+insert into orderitems values (1004,100,4);
+insert into orderitems values (1006,101,24);
+insert into orderitems values (1007,101,24);
+
+commit;
+
+insert into store_sales values (100,14.10,'VISA','2017-11-05 12:30',3); -- 1 Bud 6pk
+insert into store_sales values (101,26.03,'MC','2017-11-05 12:35',3); -- 3 Fat Tug
+insert into store_sales values (102,29.43,'DEBIT','2017-11-05 12:50',3); -- 2 Screw It Shiraz
+insert into store_sales values (103,16.05,'VISA','2017-11-05 13:00',3); -- 1 Like This, 1 Like That, 1 Doritos
+
+commit;
+
+insert into saleitems values (1000,100,1);
+insert into saleitems values (1008,101,3);
+insert into saleitems values (1017,102,2);
+insert into saleitems values (1006,103,1);
+insert into saleitems values (1007,103,1);
+insert into saleitems values (1023,103,1);
+
+commit;
+
+insert into reports values (1,'2017-11-05','2017-11-05',1,85.61,0.00,170.00);
+
+
 
 

@@ -28,7 +28,7 @@ create table beers (
     region varchar(30),
     alcohol_percentage double precision,
     type varchar(20),
-    volume int,
+    volume_in_mL int,
     pack_quantity int,
     primary key (sku),
     foreign key (sku) references items on delete cascade);
@@ -43,7 +43,7 @@ create table wines (
     region varchar(30),
     alcohol_percentage double precision,
     type varchar(20),
-    volume int,
+    volume_in_mL int,
     subtype varchar(20),
     primary key (sku),
     foreign key (sku) references items on delete cascade);
@@ -82,10 +82,8 @@ commit;
 create table orders (
     order_number int not null,
     supplier varchar(20),
-    time_placed TIMESTAMP,
-    date_placed TIMESTAMP,
-    time_received TIMESTAMP,
-    date_received TIMESTAMP,
+    time_date_placed TIMESTAMP,
+    time_date_received TIMESTAMP,
     employee_id int not null,
     primary key (order_number),
     foreign key (employee_id) references employees);
@@ -133,8 +131,8 @@ commit;
 
 create table reports (
     report_id int not null,
-    st_date timestamp,
-    end_date timestamp,
+    st_date date,
+    end_date date,
     store_id int not null,
     total_sales double precision,
     total_orders double precision,
