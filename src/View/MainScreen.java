@@ -33,18 +33,23 @@ public class MainScreen {
         searchStockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFrame frame = new JFrame("Search Stock");
+                frame.setContentPane(new SearchStock().getSearchStockPanel());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
         manageEmployeesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    JFrame frame = new JFrame("Employee Management");
-                    frame.setContentPane(new EmployeeManagement().getPanelEM());
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                JFrame frame = new JFrame("Employee Management");
+                frame.setContentPane(new EmployeeManagement().getPanelEM());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }
