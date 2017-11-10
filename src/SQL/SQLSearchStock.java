@@ -1,14 +1,13 @@
 package SQL;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.Vector;
 
 public class SQLSearchStock {
-    private final String ALL_STORES = "All Stores";
-    private final String BEERS = "Beers";
-    Connection con;
+    private static final String ALL_SUBTYPES = "All Types";
+    private static final String ALL_STORES = "All Stores";
+    private final Connection con;
 
     public SQLSearchStock() {
         con = DatabaseConnection.getConnection();
@@ -51,25 +50,18 @@ public class SQLSearchStock {
         return ps.executeQuery();
     }
 
-    public ResultSet selectBySubType(String subType, boolean beer, String storeName) throws SQLException{
-        PreparedStatement ps;
-        if (beer) {
-            ps = con.prepareStatement(
-                    "SELECT b.sku, s.name as storeName, b.company, si.stock_quantity "
-                        + "FROM BEERS b, STORES s, STOREITEMS si "
-                        + "WHERE b.sku = si.sku AND s.store_id = si.store_id AND b.type = ? AND s.name LIKE ? ");
-        } else {
-            ps = con.prepareStatement(
-                    "SELECT w.sku, s.name as storeName, w.company, si.stock_quantity "
-                            + "FROM WINES w, STORES s, STOREITEMS si "
-                            + "WHERE w.sku = si.sku AND s.store_id = si.store_id AND w.type = ? AND s.name LIKE ? ");
-        }
-        ps.setString(1, subType);
+    public ResultSet selectBySubType(String subType, String type, String storeName) throws SQLException{
+        PreparedStatement ps = con.prepareStatement(
+                    "SELECT t.sku, t.company, i.name, t.type, s.name as storeName, si.stock_quantity "
+                            + "FROM ITEMS i, STORES s, STOREITEMS si, " + type + " t "
+                            + "WHERE t.sku = si.sku AND i.sku = t.sku AND s.store_id = si.store_id AND " +
+                            "t.type LIKE ? AND s.name LIKE ? ");
+        setSubTypeVariable(ps, subType);
         setStoreVariable(ps, storeName);
         return ps.executeQuery();
     }
 
-    public Vector<String> selectByStore() throws SQLException {
+    public Vector<String> getStoreNames() throws SQLException {
         Vector<String> storeNames = new Vector<String>();
         storeNames.add(ALL_STORES);
         PreparedStatement ps = con.prepareStatement("SELECT s.name " + "FROM STORES s ");
@@ -82,20 +74,25 @@ public class SQLSearchStock {
         return storeNames;
     }
 
-    public Vector<String> selectByType(String type) throws SQLException {
-        PreparedStatement ps;
-        Vector<String> typeNames = new Vector<>();
-        if (type.equals(BEERS)) {
-            ps = con.prepareStatement("SELECT DISTINCT b.type " + "FROM BEERS b ");
-        } else {
-            ps = con.prepareStatement("SELECT DISTINCT w.type " + "FROM WINES w ");
-        }
+    public Vector<String> getSubTypeNames(String type) throws SQLException {
+        Vector<String> subTypeNames = new Vector<>();
+        subTypeNames.add(ALL_SUBTYPES);
+        PreparedStatement ps = con.prepareStatement("SELECT DISTINCT type " + "FROM " + type);
+
         ResultSet results = ps.executeQuery();
         while (results.next()) {
-            typeNames.add(results.getString(1));
+            subTypeNames.add(results.getString(1));
         }
 
-        return typeNames;
+        return subTypeNames;
+    }
+
+    public void setSubTypeVariable(PreparedStatement ps, String subType) throws SQLException {
+        if (subType.equals(ALL_SUBTYPES)) {
+            ps.setString(1, "%");
+        } else {
+            ps.setString(1, subType);
+        }
     }
 
     public void setStoreVariable(PreparedStatement ps, String storeName) throws SQLException {

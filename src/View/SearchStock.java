@@ -16,25 +16,29 @@ public class SearchStock extends JFrame {
     private JButton skuSearchButton;
     private JLabel searchBySKULabel;
     private JLabel searchByNameLabel;
-    private JButton nameButton;
+    private JButton nameSearchButton;
     private JScrollPane resultsPane;
     private JComboBox storeNames;
     private JLabel taxLabel;
     private JRadioButton beforeTaxRadioButton;
     private JRadioButton afterTaxRadioButton;
-    private JRadioButton beerRadionButton;
+    private JRadioButton beerRadioButton;
     private JRadioButton wineRadioButton;
-    private JButton typeButton;
+    private JButton typeSearchButton;
     private JComboBox subTypes;
     private SQLSearchStock search;
 
     public SearchStock() {
         search = new SQLSearchStock();
         setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
-        setAndGroupButtons(beerRadionButton, wineRadioButton);
+        setAndGroupButtons(beerRadioButton, wineRadioButton);
         populateStoreDropDown();
         populateSubTypeDropDown("Beers");
+        createSearchButtonListeners();
+        createRadioButtonListeners();
+    }
 
+    private void createSearchButtonListeners() {
         skuSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,7 +58,7 @@ public class SearchStock extends JFrame {
             }
         });
 
-        nameButton.addActionListener(new ActionListener() {
+        nameSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
@@ -74,18 +78,18 @@ public class SearchStock extends JFrame {
             }
         });
 
-        typeButton.addActionListener(new ActionListener() {
+        typeSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String subType = (String) subTypes.getSelectedItem();
                 String store = (String) storeNames.getSelectedItem();
                 try {
-                    if (beerRadionButton.isSelected()) {
+                    if (beerRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySubType(subType, true, store))));
+                                (search.buildResultsTableModel(search.selectBySubType(subType, beerRadioButton.getText(), store))));
                     } else {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySubType(subType, false, store))));
+                                (search.buildResultsTableModel(search.selectBySubType(subType, wineRadioButton.getText(), store))));
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -93,12 +97,15 @@ public class SearchStock extends JFrame {
 
             }
         });
+    }
 
-        beerRadionButton.addActionListener(new ActionListener() {
+
+    private void createRadioButtonListeners() {
+        beerRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (beerRadionButton.isSelected()) {
-                    populateSubTypeDropDown(beerRadionButton.getText().trim());
+                if (beerRadioButton.isSelected()) {
+                    populateSubTypeDropDown(beerRadioButton.getText().trim());
                 }
             }
         });
@@ -113,6 +120,7 @@ public class SearchStock extends JFrame {
         });
     }
 
+
     private void setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
         ButtonGroup group = new ButtonGroup();
         group.add(brother);
@@ -122,7 +130,7 @@ public class SearchStock extends JFrame {
 
     private void populateStoreDropDown() {
         try {
-            Vector<String> stores = search.selectByStore();
+            Vector<String> stores = search.getStoreNames();
             for (int i = 0; i < stores.size(); i++) {
                 storeNames.addItem(stores.get(i));
             }
@@ -136,7 +144,7 @@ public class SearchStock extends JFrame {
     private void populateSubTypeDropDown(String type) {
         subTypes.removeAllItems();
         try {
-            Vector<String> types = search.selectByType(type);
+            Vector<String> types = search.getSubTypeNames(type);
             for (int i = 0; i < types.size(); i++) {
                 subTypes.addItem(types.get(i));
             }
@@ -145,13 +153,14 @@ public class SearchStock extends JFrame {
         }
     }
 
-    public JPanel getSearchStockPanel() {
-        return searchStockPanel;
-    }
-
     private void setTableInScrollPane(JTable table) {
         table.setPreferredScrollableViewportSize(new Dimension(400, 100));
         resultsPane.setViewportView(table);
+    }
+
+
+    public JPanel getSearchStockPanel() {
+        return searchStockPanel;
     }
 
 }
