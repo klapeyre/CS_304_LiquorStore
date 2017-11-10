@@ -47,10 +47,10 @@ public class SearchStock extends JFrame {
                 try {
                     if (beforeTaxRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySKU(sku, false, store))));
+                                (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, false, store))));
                     } else {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySKU(sku, true, store))));
+                                (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, true, store))));
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -66,10 +66,10 @@ public class SearchStock extends JFrame {
                 try {
                     if (beforeTaxRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectByName(name, false, store))));
+                                (ViewUtils.buildResultsTableModel(search.selectByName(name, false, store))));
                     } else {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectByName(name, true, store))));
+                                (ViewUtils.buildResultsTableModel(search.selectByName(name, true, store))));
 
                     }
                 } catch (SQLException e1) {
@@ -86,10 +86,10 @@ public class SearchStock extends JFrame {
                 try {
                     if (beerRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySubType(subType, beerRadioButton.getText(), store))));
+                                (ViewUtils.buildResultsTableModel(search.selectBySubType(subType, beerRadioButton.getText(), store))));
                     } else {
                         setTableInScrollPane(new JTable
-                                (search.buildResultsTableModel(search.selectBySubType(subType, wineRadioButton.getText(), store))));
+                                (ViewUtils.buildResultsTableModel(search.selectBySubType(subType, wineRadioButton.getText(), store))));
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
