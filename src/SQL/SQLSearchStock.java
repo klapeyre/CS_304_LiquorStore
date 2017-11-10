@@ -17,7 +17,7 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.tax as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax as price, i.description, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.sku = ? AND s.name LIKE ? ");
         } else {
@@ -35,7 +35,7 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.tax as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax as price, i.description, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.name LIKE ? AND s.name LIKE ? ");
         } else {
