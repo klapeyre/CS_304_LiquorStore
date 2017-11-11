@@ -36,15 +36,15 @@ public class SQLSearchStock {
             ps = con.prepareStatement(
                     "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax as price, i.description, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
-                            + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.name LIKE ? AND s.name LIKE ? ");
+                            + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
                     "SELECT i.sku, s.name as storeName, i.name, i.price, i.description, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
-                            + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.name LIKE ? AND s.name LIKE ? ");
+                            + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         }
 
-        ps.setString(1, "%" + name + "%");
+        ps.setString(1, "%" + name.toUpperCase() + "%");
         setStoreVariable(ps, storeName);
         return ps.executeQuery();
     }
