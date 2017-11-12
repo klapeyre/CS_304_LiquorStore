@@ -16,10 +16,10 @@ public class SearchStock extends JFrame {
     private JButton skuSearchButton;
     private JLabel searchBySKULabel;
     private JLabel searchByNameLabel;
+    private JLabel skuErrorLabel;
     private JButton nameSearchButton;
     private JScrollPane resultsPane;
     private JComboBox storeNames;
-    private JLabel taxLabel;
     private JRadioButton beforeTaxRadioButton;
     private JRadioButton afterTaxRadioButton;
     private ButtonGroup taxGroupButtons;
@@ -28,10 +28,12 @@ public class SearchStock extends JFrame {
     private ButtonGroup typeGroupButtons;
     private JButton typeSearchButton;
     private JComboBox subTypes;
+    private JLabel taxLabel;
     private SQLSearchStock search;
 
     public SearchStock() {
         search = new SQLSearchStock();
+        skuErrorLabel.setVisible(false);
         taxGroupButtons = setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
         typeGroupButtons = setAndGroupButtons(beerRadioButton, wineRadioButton);
         populateStoreDropDown();
@@ -44,7 +46,7 @@ public class SearchStock extends JFrame {
         skuSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int sku = Integer.parseInt(skuField.getText());
+                int sku = parseUserInput(skuField, skuErrorLabel, "sku");
                 String store = (String) storeNames.getSelectedItem();
                 try {
                     if (afterTaxRadioButton.isSelected()) {
@@ -77,6 +79,8 @@ public class SearchStock extends JFrame {
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
+
+                skuErrorLabel.setVisible(false);
             }
         });
 
@@ -100,6 +104,7 @@ public class SearchStock extends JFrame {
                     e1.printStackTrace();
                 }
 
+                skuErrorLabel.setVisible(false);
             }
         });
     }
@@ -162,6 +167,21 @@ public class SearchStock extends JFrame {
     private void setTableInScrollPane(JTable table) {
         table.setPreferredScrollableViewportSize(new Dimension(400, 100));
         resultsPane.setViewportView(table);
+    }
+
+
+    private int parseUserInput(JTextField inputField, JLabel errorLabel, String id) {
+        int value = 0;
+        try {
+            value = Integer.parseInt(inputField.getText());
+            errorLabel.setVisible(false);
+        } catch (NumberFormatException ne) {
+            errorLabel.setVisible(true);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setText("Invalid input value for: " + id);
+            value = -1;
+        }
+        return value;
     }
 
 

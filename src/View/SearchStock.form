@@ -155,16 +155,6 @@
               <text value="Store"/>
             </properties>
           </component>
-          <component id="31be2" class="javax.swing.JLabel" binding="taxLabel" default-binding="true">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <text value="Tax"/>
-            </properties>
-          </component>
           <component id="8c2d1" class="javax.swing.JRadioButton" binding="beforeTaxRadioButton" default-binding="true">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -179,6 +169,22 @@
             </constraints>
             <properties>
               <text value="After Tax + Deposit"/>
+            </properties>
+          </component>
+          <component id="cc644" class="javax.swing.JLabel" binding="skuErrorLabel">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Label"/>
+            </properties>
+          </component>
+          <component id="2235d" class="javax.swing.JLabel" binding="taxLabel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Tax"/>
             </properties>
           </component>
         </children>
