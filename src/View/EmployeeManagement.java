@@ -77,6 +77,7 @@ public class EmployeeManagement {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "New employee with ID "+employeeID+" was added!");
+                clearTextFields();
             }
         });
 
@@ -98,6 +99,7 @@ public class EmployeeManagement {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" was removed!");
+                clearTextFields();
             }
         });
 
@@ -121,6 +123,7 @@ public class EmployeeManagement {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Employee's salary was changed!");
+                clearTextFields();
             }
         });
     }
@@ -130,6 +133,17 @@ public class EmployeeManagement {
         removeIdErrorLabel.setVisible(false);
         idSalaryErrorLabel.setVisible(false);
         salaryErrorLabel.setVisible(false);
+    }
+
+    private void clearTextFields(){
+        nameTextField.setText("");
+        usernameTextField.setText("");
+        passwordField.setText("");
+        salaryTextField.setText("");
+        storeIDTextField.setText("");
+        employeeRemoveTextField.setText("");
+        employeeChangeSalaryTextField.setText("");
+        newSalaryTextField.setText("");
     }
 
     public JPanel getPanelEM() {
