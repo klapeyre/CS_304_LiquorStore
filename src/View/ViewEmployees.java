@@ -13,15 +13,17 @@ public class ViewEmployees {
     private JButton searchButton;
     private JTextField employeeIDField;
     private JLabel employeeLabel;
+    private JLabel errorLabel;
     private JScrollPane resultsPane;
     private SQLViewEmployees viewEmployees;
 
     public ViewEmployees() {
         viewEmployees = new SQLViewEmployees();
+        errorLabel.setVisible(false);
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = Integer.parseInt(employeeIDField.getText());
+                int id = parseUserInput(employeeIDField, errorLabel, "ID");
                 try {
                     setTableInScrollPane(new JTable(
                             ViewUtils.buildResultsTableModel(viewEmployees.searchById(id))
@@ -36,6 +38,20 @@ public class ViewEmployees {
     private void setTableInScrollPane(JTable table) {
         table.setPreferredScrollableViewportSize(new Dimension(400, 100));
         resultsPane.setViewportView(table);
+    }
+
+    private int parseUserInput(JTextField inputField, JLabel errorLabel, String id) {
+        int value = 0;
+        try {
+            value = Integer.parseInt(inputField.getText());
+            errorLabel.setVisible(false);
+        } catch (NumberFormatException ne) {
+            errorLabel.setVisible(true);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setText("Invalid input value for: " + id);
+            value = -1;
+        }
+        return value;
     }
 
     public JPanel getViewEmployeesPanel() {
