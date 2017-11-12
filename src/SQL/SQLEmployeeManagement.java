@@ -9,13 +9,11 @@ public class SQLEmployeeManagement {
         con = Database.getConnection();
     }
 
-    public int insertNewEmployee(String name, String username, char[] password, Double salary, int storeID, String type){
-        int employeeID =2; //TODO make unique
+    public int insertNewEmployee(String name, String username, char[] password, Double salary, int storeID, String type) throws SQLException {
         PreparedStatement ps;
 
         try {
             ps = con.prepareStatement("INSERT INTO employees VALUES (seq_id.nextval,?,?,?,?,?,?)");
-            //ps.setInt(1,employeeID); //todo
             ps.setString(1, name);
             ps.setString(2, username);
             ps.setString(3, String.valueOf(password));
@@ -32,7 +30,6 @@ public class SQLEmployeeManagement {
             ps.close();
 
         } catch (SQLException e) {
-            e.printStackTrace(); //TODO keep?
             try
             {
                 // undo the insert
@@ -41,12 +38,27 @@ public class SQLEmployeeManagement {
                 System.out.println("Message: " + e2.getMessage());
                 System.exit(-1);
             }
-            // TODO       throw new exception at end?
+            throw e;
         }
 
-        return employeeID;
+        return getSequenceNumber();
     }
 
+    private int getSequenceNumber() throws SQLException {
+        Statement stmt;
+        ResultSet rs;
+        try{
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT seq_id.currval FROM DUAL");
+            rs.next();
+            int id = rs.getInt("CURRVAL");
+            stmt.close();
+            return id;
+        } catch (SQLException e){
+            System.out.println("Could not get sequence number. Message: " + e.getMessage());
+            throw e;
+        }
+    }
 
     public void removeEmployee(int employeeID){
         PreparedStatement ps;

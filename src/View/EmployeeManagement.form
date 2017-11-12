@@ -241,13 +241,44 @@
           <text value="Change Employee Salary"/>
         </properties>
       </component>
-      <component id="29c03" class="javax.swing.JLabel" binding="storeIDerrorLabel">
+      <component id="29c03" class="javax.swing.JLabel" binding="storeIdErrorLabel">
         <constraints>
           <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <foreground color="-4515541"/>
-          <text value="Can't leave Store ID blank"/>
+          <requestFocusEnabled value="true"/>
+          <text value="Store ID has to be an integer"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="a163" class="javax.swing.JLabel" binding="removeIdErrorLabel">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-4513738"/>
+          <text value="ID has to be an integer"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="a351f" class="javax.swing.JLabel" binding="idSalaryErrorLabel">
+        <constraints>
+          <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-4515274"/>
+          <text value="ID and salary must be numbers"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="6deb3" class="javax.swing.JLabel" binding="salaryErrorLabel">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-4515541"/>
+          <text value="Salary has to be a number"/>
           <visible value="false"/>
         </properties>
       </component>

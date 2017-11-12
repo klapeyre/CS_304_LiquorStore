@@ -3,6 +3,8 @@ package View;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import SQL.SQLEmployeeManagement;
 
 public class EmployeeManagement {
@@ -20,16 +22,23 @@ public class EmployeeManagement {
     private JTextField employeeChangeSalaryTextField;
     private JTextField newSalaryTextField;
     private JButton changeEmployeeSalaryButton;
-    private JLabel storeIDerrorLabel;
+    private JLabel storeIdErrorLabel;
+    private JLabel removeIdErrorLabel;
+    private JLabel idSalaryErrorLabel;
+    private JLabel salaryErrorLabel;
     private SQLEmployeeManagement search;
 
 
     public EmployeeManagement() {
         search = new SQLEmployeeManagement();
+        createButtonListeners();
+    }
 
+    private void createButtonListeners(){
         addNewEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeErrorLabels();
                 String name = nameTextField.getText();
                 String username = usernameTextField.getText();
                 char[] password = passwordField.getPassword();
@@ -38,15 +47,19 @@ public class EmployeeManagement {
                 String type = null;
 
                 if (!salaryTextField.getText().equals("")){
-                    salary = Double.parseDouble(salaryTextField.getText());
+                    try {
+                        salary = Double.parseDouble(salaryTextField.getText());
+                    } catch (NumberFormatException nfe){
+                        salaryErrorLabel.setVisible(true);
+                        return;
+                    }
                 }
 
-                if (storeIDTextField.getText().equals("")) {
-                    storeIDerrorLabel.setVisible(true);
-                    errorTimer();
-                    return;
-                } else {
+                try {
                     storeID = Integer.parseInt(storeIDTextField.getText());
+                } catch (NumberFormatException nfe){
+                    storeIdErrorLabel.setVisible(true);
+                    return;
                 }
 
                 if (clerkRadioButton.isSelected()){
@@ -56,8 +69,13 @@ public class EmployeeManagement {
                 }
                 System.out.println("Adding "+name+" "+username+" "+password+" "+salary+" "+storeID+" "+type);
 
-                int employeeID = search.insertNewEmployee(name, username, password, salary, storeID, type);
-                //TODO check if everything was fine then
+                int employeeID;
+                try {
+                    employeeID = search.insertNewEmployee(name, username, password, salary, storeID, type);
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(null, e1.getMessage());
+                    return;
+                }
                 JOptionPane.showMessageDialog(null, "New employee with ID "+employeeID+" was added!");
             }
         });
@@ -65,9 +83,16 @@ public class EmployeeManagement {
         removeEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int employeeID = Integer.parseInt(employeeRemoveTextField.getText());
+                removeErrorLabels();
+                int employeeID;
+                try {
+                    employeeID = Integer.parseInt(employeeRemoveTextField.getText());
+                } catch (NumberFormatException nfe){
+                    removeIdErrorLabel.setVisible(true);
+                    return;
+                }
                 search.removeEmployee(employeeID);
-                //TODO check if everything was fine then
+
                 JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" was removed!");
             }
         });
@@ -75,24 +100,27 @@ public class EmployeeManagement {
         changeEmployeeSalaryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int employeeID = Integer.parseInt(employeeChangeSalaryTextField.getText());
-                double newSalary = Double.parseDouble(newSalaryTextField.getText());
+                removeErrorLabels();
+                int employeeID;
+                double newSalary;
+                try {
+                    employeeID = Integer.parseInt(employeeChangeSalaryTextField.getText());
+                    newSalary = Double.parseDouble(newSalaryTextField.getText());
+                } catch (NumberFormatException nfe){
+                    idSalaryErrorLabel.setVisible(true);
+                    return;
+                }
                 search.changeSalary(employeeID,newSalary);
                 JOptionPane.showMessageDialog(null, "Employee's salary was changed!");
-
             }
         });
     }
 
-    private void errorTimer(){
-        Timer t = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                storeIDerrorLabel.setVisible(false);
-            }
-        });
-        t.setRepeats(false);
-        t.start();
+    private void removeErrorLabels(){
+        storeIdErrorLabel.setVisible(false);
+        removeIdErrorLabel.setVisible(false);
+        idSalaryErrorLabel.setVisible(false);
+        salaryErrorLabel.setVisible(false);
     }
 
     public JPanel getPanelEM() {

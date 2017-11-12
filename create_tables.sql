@@ -75,7 +75,7 @@ commit;
 create table employees (
     employee_id int not null,
     name varchar(30),
-    username varchar(10),
+    username varchar(10) unique,
     password varchar(10),
     salary double precision,
     store_id int not null,
