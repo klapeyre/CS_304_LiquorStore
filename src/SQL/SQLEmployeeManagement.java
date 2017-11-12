@@ -69,8 +69,7 @@ public class SQLEmployeeManagement {
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 0) {
-                //TODO throw error
-                System.out.print("DOES NOT EXIST");
+                throw new UnsupportedOperationException();
             }
             con.commit();
             ps.close();
@@ -100,8 +99,7 @@ public class SQLEmployeeManagement {
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 0) {
-                //TODO throw error
-                System.out.print("DOES NOT EXIST");
+                throw new UnsupportedOperationException();
             }
             con.commit();
             ps.close();

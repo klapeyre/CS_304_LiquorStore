@@ -91,8 +91,12 @@ public class EmployeeManagement {
                     removeIdErrorLabel.setVisible(true);
                     return;
                 }
-                search.removeEmployee(employeeID);
-
+                try{
+                    search.removeEmployee(employeeID);
+                } catch (UnsupportedOperationException e1){
+                    JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" does not exist");
+                    return;
+                }
                 JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" was removed!");
             }
         });
@@ -110,7 +114,12 @@ public class EmployeeManagement {
                     idSalaryErrorLabel.setVisible(true);
                     return;
                 }
-                search.changeSalary(employeeID,newSalary);
+                try {
+                    search.changeSalary(employeeID, newSalary);
+                } catch (UnsupportedOperationException e1){
+                    JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" does not exist");
+                    return;
+                }
                 JOptionPane.showMessageDialog(null, "Employee's salary was changed!");
             }
         });
