@@ -1,3 +1,11 @@
+create sequence seq_id
+    minvalue 1
+    start with 1
+    increment by 1
+    cache 10;
+
+commit;
+
 create table stores (
     store_id int not null,
     address varchar(30),
@@ -71,7 +79,7 @@ create table employees (
     password varchar(10),
     salary double precision,
     store_id int not null,
-    type int,
+    type varchar(10),
     primary key (employee_id),
     foreign key (store_id) references stores);
 
