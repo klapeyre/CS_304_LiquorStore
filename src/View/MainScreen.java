@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import View.EmployeeManagement;
 import View.StockManagement;
+import View.MakeSale;
 
 public class MainScreen {
     private JButton manageStockButton;
@@ -46,6 +47,17 @@ public class MainScreen {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame("Employee Management");
                 frame.setContentPane(new EmployeeManagement().getPanelEM());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
+        makeSaleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Make Sale");
+                frame.setContentPane(new MakeSale().getPanelMS());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
