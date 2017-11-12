@@ -75,6 +75,17 @@ public class MainScreen {
                 frame.setVisible(true);
             }
         });
+        makeOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Make Order");
+                frame.setContentPane(new MakeOrder().getMakeOrderMainPanel());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
     }
 
     public JPanel getPanelMain() {
