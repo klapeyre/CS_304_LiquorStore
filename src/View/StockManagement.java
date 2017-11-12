@@ -42,7 +42,7 @@ public class StockManagement {
                 int quantity = Integer.parseInt(quantityTextField.getText());
 
                 System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+storeID+" "+percentage+" "+type+" "+region+" "+company+" "+quantity);
-                // TODO instantiate a ManageStock object here, using input data obtained from GUI
+                // TODO instantiate a SQLStockManagement object here, using input data obtained from GUI
 
                 if (beerRadioButton.isSelected()){
                     int packQuantity = Integer.parseInt(packQuantityTextField.getText());

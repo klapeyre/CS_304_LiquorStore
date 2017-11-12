@@ -2,12 +2,12 @@ package SQL;
 import java.io.IOException;
 import java.sql.*;
 
-public class ManageStock {
+public class SQLStockManagement {
 
     // Need to figure out how we're going to handle different item tables
     // assuming Beer for now
 
-    public ManageStock() {
+    public SQLStockManagement() {
 
     }
 
