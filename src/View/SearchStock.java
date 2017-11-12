@@ -22,18 +22,20 @@ public class SearchStock extends JFrame {
     private JLabel taxLabel;
     private JRadioButton beforeTaxRadioButton;
     private JRadioButton afterTaxRadioButton;
+    private ButtonGroup taxGroupButtons;
     private JRadioButton beerRadioButton;
     private JRadioButton wineRadioButton;
+    private ButtonGroup typeGroupButtons;
     private JButton typeSearchButton;
     private JComboBox subTypes;
     private SQLSearchStock search;
 
     public SearchStock() {
         search = new SQLSearchStock();
-        setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
-        setAndGroupButtons(beerRadioButton, wineRadioButton);
+        taxGroupButtons = setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
+        typeGroupButtons = setAndGroupButtons(beerRadioButton, wineRadioButton);
         populateStoreDropDown();
-        populateSubTypeDropDown("Beers");
+        populateTypeDropDown("Beers");
         createSearchButtonListeners();
         createRadioButtonListeners();
     }
@@ -45,12 +47,12 @@ public class SearchStock extends JFrame {
                 int sku = Integer.parseInt(skuField.getText());
                 String store = (String) storeNames.getSelectedItem();
                 try {
-                    if (beforeTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, false, store))));
-                    } else {
+                    if (afterTaxRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, true, store))));
+                    } else {
+                        setTableInScrollPane(new JTable
+                                (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, false, store))));
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -64,12 +66,12 @@ public class SearchStock extends JFrame {
                 String name = nameField.getText();
                 String store = (String) storeNames.getSelectedItem();
                 try {
-                    if (beforeTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(search.selectByName(name, false, store))));
-                    } else {
+                    if (afterTaxRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectByName(name, true, store))));
+                    } else {
+                        setTableInScrollPane(new JTable
+                                (ViewUtils.buildResultsTableModel(search.selectByName(name, false, store))));
 
                     }
                 } catch (SQLException e1) {
@@ -83,13 +85,16 @@ public class SearchStock extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String subType = (String) subTypes.getSelectedItem();
                 String store = (String) storeNames.getSelectedItem();
+                String type = ViewUtils.getSelectedButtonText(typeGroupButtons);
                 try {
-                    if (beerRadioButton.isSelected()) {
+                    if (afterTaxRadioButton.isSelected()) {
                         setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(search.selectBySubType(subType, beerRadioButton.getText(), store))));
+                                (ViewUtils.buildResultsTableModel(
+                                        search.selectByType(subType, type, store, true))));
                     } else {
                         setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(search.selectBySubType(subType, wineRadioButton.getText(), store))));
+                                (ViewUtils.buildResultsTableModel(
+                                        search.selectByType(subType, type, store, false))));
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -105,7 +110,7 @@ public class SearchStock extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (beerRadioButton.isSelected()) {
-                    populateSubTypeDropDown(beerRadioButton.getText().trim());
+                    populateTypeDropDown(beerRadioButton.getText().trim());
                 }
             }
         });
@@ -114,18 +119,19 @@ public class SearchStock extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (wineRadioButton.isSelected()) {
-                    populateSubTypeDropDown(wineRadioButton.getText().trim());
+                    populateTypeDropDown(wineRadioButton.getText().trim());
                 }
             }
         });
     }
 
 
-    private void setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
+    private ButtonGroup setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
         ButtonGroup group = new ButtonGroup();
         group.add(brother);
         group.add(sister);
         brother.setSelected(true);
+        return group;
     }
 
     private void populateStoreDropDown() {
@@ -141,7 +147,7 @@ public class SearchStock extends JFrame {
         }
     }
 
-    private void populateSubTypeDropDown(String type) {
+    private void populateTypeDropDown(String type) {
         subTypes.removeAllItems();
         try {
             Vector<String> types = search.getSubTypeNames(type);
