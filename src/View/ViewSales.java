@@ -17,6 +17,8 @@ public class ViewSales extends JFrame {
     private JTextField endDateTextField;
     private JButton searchByDateButton;
     private JScrollPane ResultsTable;
+    private JButton searchSaleByEmployeeButton;
+    private JButton sortBestSellers;
     private SQLViewSales search;
 
 
@@ -60,7 +62,34 @@ public class ViewSales extends JFrame {
             }
         });
 
+        searchSaleByEmployeeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String startDate = startDateTextField.getText();
+                String endDate = endDateTextField.getText();
+                Date sDate = Date.valueOf(startDate);
+                Date eDate = Date.valueOf(endDate);
 
+                try {
+                    setTableInScrollPane(new JTable
+                            (ViewUtils.buildResultsTableModel(search.searchByDateAndEmployee(sDate, eDate))));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        sortBestSellers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    setTableInScrollPane(new JTable
+                            (ViewUtils.buildResultsTableModel(search.findBestSellers())));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
     }
 

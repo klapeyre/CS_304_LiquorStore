@@ -1,10 +1,13 @@
 package View;
 
+import oracle.sql.TIMESTAMP;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -34,7 +37,13 @@ public final class ViewUtils {
         while (results.next()) {
             Vector<Object> vector = new Vector<Object>();
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                vector.add(results.getObject(columnIndex));
+                Object temp = results.getObject(columnIndex);
+                Object cl = temp.getClass();
+                if (temp.getClass() == TIMESTAMP.class) {
+                    vector.add(results.getTimestamp(columnIndex));
+                } else {
+                    vector.add(temp);
+                }
             }
             data.add(vector);
         }
