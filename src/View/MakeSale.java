@@ -102,13 +102,14 @@ public class MakeSale {
                 if(!dataAreOkForSale(data, storeID)){
                     return;
                 } else {
+                    Integer saleNumber;
                     try {
-                        sqlMakeSale.makeSale(data, storeID, paymentType, employeeID);
+                        saleNumber = sqlMakeSale.makeSale(data, storeID, paymentType, employeeID);
                     } catch (SQLException e1) {
                         JOptionPane.showMessageDialog(null, "Sale could not be made. "+e1.getMessage());
                         return;
                     }
-                    JOptionPane.showMessageDialog(null, "Sale was made! :)");
+                    JOptionPane.showMessageDialog(null, "Sale "+saleNumber+" was made! :)");
                 }
             }
         });

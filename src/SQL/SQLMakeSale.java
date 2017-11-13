@@ -44,14 +44,14 @@ public class SQLMakeSale {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Could not determine quantity of item. Message: "+e.getMessage());
-            System.exit(-1); //TODO what behaviour do we want
+            System.exit(-1);
         }
         return quantity;
     }
 
-    public void makeSale(Integer[][] data, Integer storeID, String paymentType, Integer employeeID) throws SQLException {
+    public Integer makeSale(Integer[][] data, Integer storeID, String paymentType, Integer employeeID) throws SQLException {
 
-        Double totalPrice = 0.0;//TODO
+        Double totalPrice = getTotalPrice(data);
         Integer saleNumber = makeNewSale(totalPrice, paymentType, employeeID);
 
         for (int i = 0; i < data.length; i++ ) {
@@ -61,6 +61,42 @@ public class SQLMakeSale {
             Integer newQuantity = itemQuantityAtStore(sku, storeID) - quantity;
             updateStockQuantity(sku, newQuantity, storeID);
         }
+        return saleNumber;
+    }
+
+    private Double getTotalPrice(Integer[][] data) throws SQLException {
+        Double totalPrice = 0.0;
+        for (int i = 0; i < data.length; i++ ) {
+            Integer sku = data[i][0];
+            Integer quantity = data[i][1];
+            totalPrice = totalPrice + getPrice(sku, quantity);
+        }
+        return totalPrice;
+    }
+
+    private Double getPrice(Integer sku, Integer quantity) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs;
+        Double tax = 0.0;
+        Double deposit = 0.0;
+        Double price = 0.0;
+
+        try {
+            ps = con.prepareStatement("SELECT tax, deposit, price FROM items WHERE sku = ?");
+            ps.setInt(1, sku);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                tax = rs.getDouble("tax");
+                deposit = rs.getDouble("deposit");
+                price = rs.getDouble("price");
+            }
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Could not get price of item. Message: " + e.getMessage());
+            throw e;
+        }
+        return (deposit+price)*(1+tax)*quantity;
     }
 
     private Integer makeNewSale(Double totalPrice, String paymentType,Integer employeeID) throws SQLException {
