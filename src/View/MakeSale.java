@@ -87,24 +87,37 @@ public class MakeSale {
                 }
 
                 Integer[][] data = getTableData();
-                //todo make changes in saleitems and store_salesm store items
-                for (int i = 0; i < data.length; i++ ){
-                    Integer sku = data[i][0];
-                    Integer quantity = data[i][1];
-                    if (!sqlMakeSale.itemExists(sku)){
-                        JOptionPane.showMessageDialog(null, "Item "+sku+" does not exist!");
+                if(!dataAreOkForSale(data, storeID)){
+                    return;
+                } else {
+                    try {
+                        sqlMakeSale.makeSale(data, storeID, employeeID);
+                    } catch (SQLException e1) {
+                        JOptionPane.showMessageDialog(null, "Sale could not be made. "+e1.getMessage());
                         return;
                     }
-                    int quantityAtStore = sqlMakeSale.itemQuantityAtStore(sku,storeID);
-                    if (quantityAtStore < quantity){
-                        JOptionPane.showMessageDialog(null, "There's only "+quantityAtStore+" of item "+sku+" at store "+storeID+".");
-                        return;
-                    }
-
-
+                    JOptionPane.showMessageDialog(null, "Sale was made! :)");
                 }
             }
         });
+    }
+
+    private boolean dataAreOkForSale(Integer[][] data, Integer storeID){
+        boolean dataOk = true;
+        for (int i = 0; i < data.length; i++ ){
+            Integer sku = data[i][0];
+            Integer quantity = data[i][1];
+            if (!sqlMakeSale.itemExists(sku)){
+                JOptionPane.showMessageDialog(null, "Item "+sku+" does not exist!");
+                dataOk = false;
+            }
+            int quantityAtStore = sqlMakeSale.itemQuantityAtStore(sku,storeID);
+            if (quantityAtStore < quantity){
+                JOptionPane.showMessageDialog(null, "There's only "+quantityAtStore+" of item "+sku+" at store "+storeID+".");
+                dataOk = false;
+            }
+        }
+        return dataOk;
     }
 
     private boolean isInTableAlready(Integer skuToMatch){
