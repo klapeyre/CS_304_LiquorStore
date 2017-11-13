@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import SQL.SQLMakeSale;
 
 public class MakeSale {
@@ -15,6 +17,9 @@ public class MakeSale {
     private JLabel skuQuantityErrorLabel;
     private JTable saleItemTable;
     private JPanel panelMS;
+    private JTextField employeeIDTextField;
+    private JTextField storeIdTextField;
+    private JLabel empStoreErrorLabel;
     DefaultTableModel dataModel;
     private SQLMakeSale sqlMakeSale;
 
@@ -30,7 +35,7 @@ public class MakeSale {
         addToSaleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                skuQuantityErrorLabel.setVisible(false);
+                clearErrors();
                 int sku;
                 int quantity;
 
@@ -41,7 +46,17 @@ public class MakeSale {
                     skuQuantityErrorLabel.setVisible(true);
                     return;
                 }
-                //todo check if item already in...
+
+                if (!sqlMakeSale.itemExists(sku)){
+                    JOptionPane.showMessageDialog(null, "Item "+sku+" does not exist!");
+                    return;
+                }
+
+                if (isInTableAlready(sku)){
+                    JOptionPane.showMessageDialog(null, "Item "+sku+" is in table already, edit quantity there.");
+                    return;
+                }
+
                 Integer[] rowData = {sku, quantity};
                 dataModel.addRow(rowData);
             }
@@ -60,19 +75,46 @@ public class MakeSale {
         makeSaleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clearErrors();
+                Integer employeeID;
+                Integer storeID;
+                try {
+                    employeeID = Integer.parseInt(employeeIDTextField.getText());
+                    storeID = Integer.parseInt(storeIdTextField.getText());
+                } catch (NumberFormatException nfe){
+                    empStoreErrorLabel.setVisible(true);
+                    return;
+                }
+
                 Integer[][] data = getTableData();
-                System.out.println(data);
-                //todo for each item check it exists in the table, ensure value is fine to subtract
-                //todo make changes in saleitems and store_sales
+                //todo make changes in saleitems and store_salesm store items
                 for (int i = 0; i < data.length; i++ ){
                     Integer sku = data[i][0];
                     Integer quantity = data[i][1];
+                    if (!sqlMakeSale.itemExists(sku)){
+                        JOptionPane.showMessageDialog(null, "Item "+sku+" does not exist!");
+                        return;
+                    }
+                    int quantityAtStore = sqlMakeSale.itemQuantityAtStore(sku,storeID);
+                    if (quantityAtStore < quantity){
+                        JOptionPane.showMessageDialog(null, "There's only "+quantityAtStore+" of item "+sku+" at store "+storeID+".");
+                        return;
+                    }
 
-                    sqlMakeSale.itemExists(sku);//todo
 
                 }
             }
         });
+    }
+
+    private boolean isInTableAlready(Integer skuToMatch){
+        Integer[][] data = getTableData();
+        for (int i = 0; i < data.length; i++ ) {
+            Integer sku = data[i][0];
+            if (sku.intValue() == skuToMatch.intValue())
+                return true;
+        }
+        return false;
     }
 
     private Integer[][] getTableData() {
@@ -82,6 +124,11 @@ public class MakeSale {
             for (int j = 0 ; j < 2 ; j++)
                 tableData[i][j] = Integer.valueOf(dataModel.getValueAt(i,j).toString());
         return tableData;
+    }
+
+    private void clearErrors(){
+        skuQuantityErrorLabel.setVisible(false);
+        empStoreErrorLabel.setVisible(false);
     }
 
     public JPanel getPanelMS() {
