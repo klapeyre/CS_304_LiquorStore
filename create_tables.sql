@@ -76,7 +76,6 @@ create table employees (
     foreign key (store_id) references stores);
 
 grant select on employees to public;
---TODO should be to manager only
 
 commit;
 
