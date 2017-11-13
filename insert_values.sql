@@ -99,8 +99,8 @@ insert into storeitems values (1009,2,24);
 
 commit;
 
-insert into employees values (1,'John Manage','jmanage','password1',100.00,1,1);
-insert into employees values (3,'Michael C','mc','password3',70.00,1,2);
+insert into employees values (1,'John Manage','jmanage','password1',100.00,1,'Manager');
+insert into employees values (3,'Michael C','mc','password3',70.00,1,'Clerk');
 
 commit;
 
