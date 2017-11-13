@@ -6,7 +6,7 @@ public class SQLEmployeeManagement {
     private final Connection con;
 
     public SQLEmployeeManagement() {
-        con = Database.getConnection();
+        con = DatabaseConnection.getConnection();
     }
 
     public int insertNewEmployee(String name, String username, char[] password, Double salary, int storeID, String type) throws SQLException {
