@@ -87,6 +87,14 @@ grant select on employees to public;
 
 commit;
 
+create view clerk_view(name, store_id) as
+select name, store_id
+from employees;
+
+grant select on clerk_view to public;
+
+commit;
+
 create table orders (
     order_number int not null,
     supplier varchar(20),
