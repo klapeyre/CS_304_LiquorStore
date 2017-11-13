@@ -1,10 +1,7 @@
 package View;
 
-import SQL.DatabaseConnection;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.Enumeration;
 import java.util.Vector;
