@@ -110,10 +110,10 @@ insert into orderitems values (1007,101,24);
 
 commit;
 
-insert into store_sales values (100,14.10,'VISA','2017-11-05 12:30',3);
-insert into store_sales values (101,26.03,'MC','2017-11-05 12:35',3);
-insert into store_sales values (102,29.43,'DEBIT','2017-11-05 12:50',3);
-insert into store_sales values (103,16.05,'VISA','2017-11-05 13:00',3);
+insert into store_sales values (100,14.10,'Credit','2017-11-05 12:30',3);
+insert into store_sales values (101,26.03,'Debit','2017-11-05 12:35',3);
+insert into store_sales values (102,29.43,'Debit','2017-11-05 12:50',3);
+insert into store_sales values (103,16.05,'Cash','2017-11-05 13:00',3);
 
 commit;
 

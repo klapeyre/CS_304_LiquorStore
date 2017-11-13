@@ -20,6 +20,9 @@ public class MakeSale {
     private JTextField employeeIDTextField;
     private JTextField storeIdTextField;
     private JLabel empStoreErrorLabel;
+    private JRadioButton creditRadioButton;
+    private JRadioButton debitRadioButton;
+    private JRadioButton cashRadioButton;
     DefaultTableModel dataModel;
     private SQLMakeSale sqlMakeSale;
 
@@ -78,6 +81,7 @@ public class MakeSale {
                 clearErrors();
                 Integer employeeID;
                 Integer storeID;
+                String paymentType=null;
                 try {
                     employeeID = Integer.parseInt(employeeIDTextField.getText());
                     storeID = Integer.parseInt(storeIdTextField.getText());
@@ -86,12 +90,20 @@ public class MakeSale {
                     return;
                 }
 
+                if (creditRadioButton.isSelected()){
+                    paymentType = creditRadioButton.getText();
+                } else if (debitRadioButton.isSelected()){
+                    paymentType = debitRadioButton.getText();
+                } else if (cashRadioButton.isSelected()){
+                    paymentType = cashRadioButton.getText();
+                }
+
                 Integer[][] data = getTableData();
                 if(!dataAreOkForSale(data, storeID)){
                     return;
                 } else {
                     try {
-                        sqlMakeSale.makeSale(data, storeID, employeeID);
+                        sqlMakeSale.makeSale(data, storeID, paymentType, employeeID);
                     } catch (SQLException e1) {
                         JOptionPane.showMessageDialog(null, "Sale could not be made. "+e1.getMessage());
                         return;

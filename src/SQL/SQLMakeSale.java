@@ -1,5 +1,7 @@
 package SQL;
 
+import View.ViewUtils;
+
 import java.sql.*;
 
 public class SQLMakeSale {
@@ -47,9 +49,10 @@ public class SQLMakeSale {
         return quantity;
     }
 
-    public void makeSale(Integer[][] data, Integer storeID, Integer employeeID) throws SQLException {
+    public void makeSale(Integer[][] data, Integer storeID, String paymentType, Integer employeeID) throws SQLException {
 
-        Integer saleNumber = makeNewSale();
+        Double totalPrice = 0.0;//TODO
+        Integer saleNumber = makeNewSale(totalPrice, paymentType, employeeID);
 
         for (int i = 0; i < data.length; i++ ) {
             Integer sku = data[i][0];
@@ -60,8 +63,33 @@ public class SQLMakeSale {
         }
     }
 
-    private Integer makeNewSale(){
-        return 100;//todo
+    private Integer makeNewSale(Double totalPrice, String paymentType,Integer employeeID) throws SQLException {
+        PreparedStatement ps;
+
+        try {
+            ps = con.prepareStatement("INSERT INTO store_sales VALUES (seq_id.nextval,?,?,?,?)");
+            ps.setDouble(1, totalPrice);
+            ps.setString(2, paymentType);
+            ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            ps.setInt(4, employeeID);
+
+            ps.executeUpdate();
+            con.commit();
+            ps.close();
+
+        } catch (SQLException e) {
+            System.out.println("Making new sale failed. Message: "+e.getMessage());
+            try
+            {
+                // undo the insert
+                con.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Message: " + e2.getMessage());
+                System.exit(-1);
+            }
+            throw e;
+        }
+        return ViewUtils.getSequenceNumber(con);
     }
 
     private void updateStockQuantity(Integer sku, Integer newQuantity, Integer storeID) throws SQLException {
