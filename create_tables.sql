@@ -1,3 +1,12 @@
+create view clerk_view(name, store_id) as
+select name, store_id
+from employees;
+
+grant select on clerk_view to public;
+
+commit;
+
+
 create table stores (
     store_id int not null,
     address varchar(30),
@@ -76,6 +85,7 @@ create table employees (
     foreign key (store_id) references stores);
 
 grant select on employees to public;
+--TODO should be to manager only
 
 commit;
 
