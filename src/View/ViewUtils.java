@@ -39,6 +39,7 @@ public final class ViewUtils {
             data.add(vector);
         }
 
+        results.close();
         return new DefaultTableModel(data, columnNames);
     }
 
