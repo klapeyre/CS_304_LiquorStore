@@ -3,6 +3,7 @@ package View;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import SQL.SQLStockManagement;
 
 public class StockManagement {
     private JTextField nameTextField;
@@ -24,28 +25,61 @@ public class StockManagement {
     private JTextField removeItemTextField;
     private JButton removeItemButton;
     private JTextField quantityTextField;
+    private JTextField updateItemTextField;
+    private JTextField newDescriptionTextField;
+    private JButton updateButton;
+    private JTextField newQuantityTextField;
+    private JLabel numberErrorLabel;
+    private SQLStockManagement sqlStockManagement;
 
     public StockManagement() {
+        sqlStockManagement = new SQLStockManagement();
+        createListeners();
+    }
+
+    private void createListeners(){
         addNewItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                numberErrorLabel.setVisible(false);
                 String name = nameTextField.getText();
-                double tax = Double.parseDouble(taxTextField.getText());
-                double deposit = Double.parseDouble(depositTextField.getText());
-                double price = Double.parseDouble(priceTextFieldTextField.getText());
                 String description = descriptionTextField.getText();
-                String storeID = storeIDTextField.getText();
-                double percentage = Double.parseDouble(alcoholPercentageTextField.getText());
+                Integer storeID;
                 String type = typeTextField.getText();
                 String region = regionTextField.getText();
                 String company = companyTextField.getText();
-                int quantity = Integer.parseInt(quantityTextField.getText());
+                Double tax;
+                Double deposit;
+                Double price;
+                Double percentage;
+                Integer quantity;
+                Integer packQuantity;
+
+                try {
+                    storeID = Integer.parseInt(storeIDTextField.getText());
+                } catch (NumberFormatException nfe){
+                    numberErrorLabel.setVisible(true);
+                    return;
+                }
+
+                try {
+                    tax = getTextFieldForDouble(taxTextField);
+                    deposit = getTextFieldForDouble(depositTextField);
+                    price = getTextFieldForDouble(priceTextFieldTextField);
+                    percentage = getTextFieldForDouble(alcoholPercentageTextField);
+                    quantity = null;
+                    packQuantity = null;
+                    if (getTextFieldForDouble(quantityTextField) != null)
+                        quantity = getTextFieldForDouble(quantityTextField).intValue();
+                    if (getTextFieldForDouble(packQuantityTextField) != null)
+                        packQuantity = getTextFieldForDouble(packQuantityTextField).intValue();
+                } catch (UnsupportedOperationException uoe){
+                    return;
+                }
 
                 System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+storeID+" "+percentage+" "+type+" "+region+" "+company+" "+quantity);
-                // TODO instantiate a SQLStockManagement object here, using input data obtained from GUI
 
                 if (beerRadioButton.isSelected()){
-                    int packQuantity = Integer.parseInt(packQuantityTextField.getText());
                     //TODO insert beer
                     //insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
                     //TODO check if everything was fine then
@@ -64,6 +98,8 @@ public class StockManagement {
                 }
             }
         });
+
+
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,6 +110,27 @@ public class StockManagement {
                 JOptionPane.showMessageDialog(null, "Item was removed!");
             }
         });
+
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+
+    private Double getTextFieldForDouble(JTextField textField){
+        Double value = null;
+        if (!textField.getText().equals("")){
+            try {
+                value = Double.parseDouble(textField.getText());
+            } catch (NumberFormatException nfe){
+                numberErrorLabel.setVisible(true);
+                throw new UnsupportedOperationException();
+            }
+        }
+        return value;
     }
 
     public JPanel getPanelSM() {
