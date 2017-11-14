@@ -82,19 +82,17 @@ public class MakeOrder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel model = (DefaultTableModel) resultsTable.getModel();
                 int rowCount = resultsTable.getRowCount();
-                Vector<Vector<Object>> tableContents = new Vector<Vector<Object>>();
-                tableContents = model.getDataVector();
+                Vector<Vector<Object>> tableContents = model.getDataVector();
 
                 if(rowCount != 0){
-
+                    for (Vector<Object> order : tableContents){
+                        int sku = (int)order.get(1);
+                        int qty = (int)order.get(2);
+                        String supplier = (String)order.get(3);
+                        int employeeId = (int)order.get(4);
+                        makeOrder.makeOrder(sku, qty, supplier, employeeId);
+                    }
                 }
-
-
-                // pop up message when order is made
-                // automatically attach current date
-                // ensure only manager can make an order
-                // update item tables???
-
             }
         });
     }
