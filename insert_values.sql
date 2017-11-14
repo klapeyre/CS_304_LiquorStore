@@ -64,7 +64,7 @@ commit;
 insert into storeitems values (1000,1,20);
 insert into storeitems values (1001,1,20);
 insert into storeitems values (1002,1,20);
-insert into storeitems values (1003,1,20);
+insert into storeitems values (1003,1,18);
 insert into storeitems values (1004,1,20);
 insert into storeitems values (1005,1,20);
 insert into storeitems values (1006,1,48);
@@ -72,13 +72,13 @@ insert into storeitems values (1007,1,48);
 insert into storeitems values (1008,1,24);
 insert into storeitems values (1009,1,24);
 insert into storeitems values (1010,1,12);
-insert into storeitems values (1011,1,24);
+insert into storeitems values (1011,1,23);
 insert into storeitems values (1012,1,24);
 insert into storeitems values (1013,1,24);
-insert into storeitems values (1014,1,24);
+insert into storeitems values (1014,1,21);
 insert into storeitems values (1015,1,24);
 insert into storeitems values (1016,1,16);
-insert into storeitems values (1017,1,24);
+insert into storeitems values (1017,1,27);
 insert into storeitems values (1018,1,12);
 insert into storeitems values (1019,1,24);
 insert into storeitems values (1020,1,24);
@@ -86,11 +86,21 @@ insert into storeitems values (1021,1,4);
 insert into storeitems values (1022,1,6);
 insert into storeitems values (1023,1,5);
 insert into storeitems values (1024,1,5);
+insert into storeitems values (1000,2,20);
+insert into storeitems values (1001,2,17);
+insert into storeitems values (1002,2,20);
+insert into storeitems values (1003,2,18);
+insert into storeitems values (1004,2,35);
+insert into storeitems values (1005,2,20);
+insert into storeitems values (1006,2,36);
+insert into storeitems values (1007,2,48);
+insert into storeitems values (1008,2,45);
+insert into storeitems values (1009,2,24);
 
 commit;
 
-insert into employees values (1,'John Manage','jmanage','password1',100.00,1,1);
-insert into employees values (3,'Michael C','mc','password3',70.00,1,2);
+insert into employees values (1,'John Manage','jmanage','password1',100.00,1,'Manager');
+insert into employees values (3,'Michael C','mc','password3',70.00,1,'Clerk');
 
 commit;
 
@@ -110,10 +120,10 @@ insert into orderitems values (1007,101,24);
 
 commit;
 
-insert into store_sales values (100,14.10,'VISA','2017-11-05 12:30',3);
-insert into store_sales values (101,26.03,'MC','2017-11-05 12:35',3);
-insert into store_sales values (102,29.43,'DEBIT','2017-11-05 12:50',3);
-insert into store_sales values (103,16.05,'VISA','2017-11-05 13:00',3);
+insert into store_sales values (100,14.10,'Credit','2017-11-05 12:30',3);
+insert into store_sales values (101,26.03,'Debit','2017-11-05 12:35',3);
+insert into store_sales values (102,29.43,'Debit','2017-11-05 12:50',3);
+insert into store_sales values (103,16.05,'Cash','2017-11-05 13:00',3);
 
 commit;
 
