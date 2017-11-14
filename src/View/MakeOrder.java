@@ -86,10 +86,10 @@ public class MakeOrder extends JFrame{
 
                 if(rowCount != 0){
                     for (Vector<Object> order : tableContents){
-                        int sku = (int)order.get(1);
-                        int qty = (int)order.get(2);
-                        String supplier = (String)order.get(3);
-                        int employeeId = (int)order.get(4);
+                        int sku = (int)order.get(0);
+                        int qty = (int)order.get(1);
+                        String supplier = (String)order.get(2);
+                        int employeeId = (int)order.get(3);
                         makeOrder.makeOrder(sku, qty, supplier, employeeId);
                     }
                 }

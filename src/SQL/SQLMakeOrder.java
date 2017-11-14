@@ -30,6 +30,7 @@ public class SQLMakeOrder {
             // TODO hanlde this exception
         }
         addItemToOrder(sku, qty);
+        //TODO update stock
     }
 
     private void addItemToOrder(int sku, int qty){
