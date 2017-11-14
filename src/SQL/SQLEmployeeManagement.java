@@ -1,5 +1,7 @@
 package SQL;
 
+import View.ViewUtils;
+
 import java.sql.*;
 
 public class SQLEmployeeManagement {
@@ -41,23 +43,7 @@ public class SQLEmployeeManagement {
             throw e;
         }
 
-        return getSequenceNumber();
-    }
-
-    private int getSequenceNumber() throws SQLException {
-        Statement stmt;
-        ResultSet rs;
-        try{
-            stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT seq_id.currval FROM DUAL");
-            rs.next();
-            int id = rs.getInt("CURRVAL");
-            stmt.close();
-            return id;
-        } catch (SQLException e){
-            System.out.println("Could not get sequence number. Message: " + e.getMessage());
-            throw e;
-        }
+        return ViewUtils.getSequenceNumber(con);
     }
 
     public void removeEmployee(int employeeID){
