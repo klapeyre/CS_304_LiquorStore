@@ -123,7 +123,7 @@ commit;
 create table store_sales (
     sale_number int not null,
     total_price double precision,
-    payment_type varchar(5),
+    payment_type varchar(6),
     sale_date timestamp,
     employee_id int not null,
     primary key (sale_number),
