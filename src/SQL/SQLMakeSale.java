@@ -96,7 +96,7 @@ public class SQLMakeSale {
             System.out.println("Could not get price of item. Message: " + e.getMessage());
             throw e;
         }
-        return (deposit+price)*(1+tax)*quantity;
+        return ((price*tax)+price+deposit)*quantity;
     }
 
     private Integer makeNewSale(Double totalPrice, String paymentType,Integer employeeID) throws SQLException {
