@@ -1,5 +1,7 @@
 package View;
 
+import SQL.SQLMakeOrder;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -23,16 +25,29 @@ public class MakeOrder extends JFrame{
     private JLabel qtyErrorLabel;
     private JButton removeFromOrderButton;
     private JScrollPane resultsPane;
+    private JTextField employeeIdField;
+    private JLabel EmployeeIdLabel;
+    private JLabel employeeIdErrorLabel;
+    private JTextField supplierField;
+    private JLabel supplierErrorLabel;
+    private JLabel suuplierLabel;
     private JTable resultsTable;
-    Vector<String> columnNames;
+    private Vector<String> columnNames;
+    private SQLMakeOrder makeOrder;
+
 
     public MakeOrder(){
         skuErrorLabel.setVisible(false);
         qtyErrorLabel.setVisible(false);
+        supplierErrorLabel.setVisible(false);
+        employeeIdErrorLabel.setVisible(false);
         columnNames = new Vector<String>();
         columnNames.add("SKU");
         columnNames.add("Quantity");
+        columnNames.add("Supplier");
+        columnNames.add("Employee ID");
         resultsTable = new JTable(null, columnNames);
+        makeOrder = new SQLMakeOrder();
         MakeOrderActionListeners();
     }
 
@@ -42,9 +57,11 @@ public class MakeOrder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int sku = parseUserInput(skuField, skuErrorLabel, "sku");
                 int qty = parseUserInput(qtyField, qtyErrorLabel, "qty");
-                if((sku != -1) && (qty != -1)){
+                int employeeId = parseUserInput(employeeIdField, employeeIdErrorLabel, "employeeId");
+                String supplier = supplierField.getText();
+                if((sku != -1) && (qty != -1) && (employeeId != -1)){
                     DefaultTableModel model = (DefaultTableModel) resultsTable.getModel();
-                    model.addRow(new Object[]{sku, qty});
+                    model.addRow(new Object[]{sku, qty, supplier, employeeId});
                     setTableInScrollPane(resultsTable);
                 }
             }
@@ -60,10 +77,18 @@ public class MakeOrder extends JFrame{
             }
         });
 
-
         placeOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel) resultsTable.getModel();
+                int rowCount = resultsTable.getRowCount();
+                Vector<Vector<Object>> tableContents = new Vector<Vector<Object>>();
+                tableContents = model.getDataVector();
+
+                if(rowCount != 0){
+
+                }
+
 
                 // pop up message when order is made
                 // automatically attach current date
