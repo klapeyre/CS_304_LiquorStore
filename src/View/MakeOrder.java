@@ -111,7 +111,6 @@ public class MakeOrder extends JFrame{
                 int orderNumber = parseUserInput(orderNumberField, orderNumberErrorLabel, "order #");
                 Timestamp dateReceived = new Timestamp(System.currentTimeMillis());
                 makeOrder.markOrderAsReceived(orderNumber, dateReceived);
-
             }
         });
     }

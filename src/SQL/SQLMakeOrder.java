@@ -36,19 +36,25 @@ public class SQLMakeOrder {
         PreparedStatement ps;
         ResultSet resultSet;
         int storeId = 0;
+        int employeeId = 0;
 
         try {
-            ps = con.prepareStatement("SELECT DISTINCT SI.STORE_ID" +
-                                           "FROM STOREITEMS SI, EMPLOYEES E" +
-                                           "WHERE SI.STORE_ID = E.STORE_ID AND E.EMPLOYEE_ID IN" +
-                                           "(SELECT E.EMPLOYEE_ID" +
-                                           "FROM EMPLOYEES E, ORDERS O" +
-                                           "WHERE O.EMPLOYEE_ID = E.EMPLOYEE_ID AND O.ORDER_NUMBER = ?)");
+            ps = con.prepareStatement("SELECT E.EMPLOYEE_ID FROM EMPLOYEES E, ORDERS O" +
+                                           "WHERE O.EMPLOYEE_ID = E.EMPLOYEE_ID AND O.ORDER_NUMBER = ?");
 
             ps.setInt(1, orderNumber);
             resultSet = ps.executeQuery();
+            employeeId = resultSet.getInt(1);
+
+            ps = con.prepareStatement("SELECT DISTINCT SI.STORE_ID FROM STOREITEMS SI, EMPLOYEES E" +
+                                           "WHERE SI.STORE_ID = E.STORE_ID AND E.EMPLOYEE_ID = ?");
+
+
+            ps.setInt(1, employeeId);
+            resultSet = ps.executeQuery();
             storeId = resultSet.getInt(1);
         }  catch (SQLException e){
+            e.printStackTrace();
             System.out.println("Failed to retrieve store ID");
             try{
                 con.rollback();
