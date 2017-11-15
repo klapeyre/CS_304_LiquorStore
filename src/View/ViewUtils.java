@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -38,7 +37,6 @@ public final class ViewUtils {
             Vector<Object> vector = new Vector<Object>();
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
                 Object temp = results.getObject(columnIndex);
-                Object cl = temp.getClass();
                 if (temp.getClass() == TIMESTAMP.class) {
                     vector.add(results.getTimestamp(columnIndex));
                 } else {

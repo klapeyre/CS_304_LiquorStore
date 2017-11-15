@@ -1,6 +1,8 @@
 package SQL;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 public class SQLViewSales {
 
@@ -23,11 +25,23 @@ public class SQLViewSales {
 
     public ResultSet searchByDate(Date sDate, Date eDate) throws SQLException {
         PreparedStatement ps;
-        ps = conn.prepareStatement("SELECT * " +
-                                        "FROM store_sales s " +
-                                        "WHERE s.sale_date >= ? AND s.sale_date <= ? ORDER BY s.sale_date");
-        ps.setDate(1,sDate);
-        ps.setDate(2,eDate);
+        if (sDate.toString().equals(eDate.toString())) {
+            String date = sDate.toString().substring(2,sDate.toString().length());
+            date = '%' + date + '%';
+            ps = conn.prepareStatement("SELECT * " +
+                                            "FROM store_sales s " +
+                                            "WHERE s.sale_date LIKE ? ORDER BY s.sale_date");
+            ps.setString(1,date);
+        } else {
+            String endDate = eDate.toString().substring(2,eDate.toString().length());
+            endDate = '%' + endDate + '%';
+            ps = conn.prepareStatement("SELECT * " +
+                    "FROM store_sales s " +
+                    "WHERE s.sale_date >= ? AND s.sale_date <= ? OR s.sale_date LIKE ? ORDER BY s.sale_date");
+            ps.setDate(1,sDate);
+            ps.setDate(2,eDate);
+            ps.setString(3,endDate);
+        }
         return ps.executeQuery();
     }
 
