@@ -39,20 +39,24 @@ public class SQLMakeOrder {
         int employeeId = 0;
 
         try {
-            ps = con.prepareStatement("SELECT E.EMPLOYEE_ID FROM EMPLOYEES E, ORDERS O" +
+            ps = con.prepareStatement("SELECT E.EMPLOYEE_ID FROM EMPLOYEES E, ORDERS O " +
                                            "WHERE O.EMPLOYEE_ID = E.EMPLOYEE_ID AND O.ORDER_NUMBER = ?");
 
             ps.setInt(1, orderNumber);
             resultSet = ps.executeQuery();
-            employeeId = resultSet.getInt(1);
+            while(resultSet.next()){
+                employeeId = resultSet.getInt(1);
+            }
 
-            ps = con.prepareStatement("SELECT DISTINCT SI.STORE_ID FROM STOREITEMS SI, EMPLOYEES E" +
+            ps = con.prepareStatement("SELECT DISTINCT SI.STORE_ID FROM STOREITEMS SI, EMPLOYEES E " +
                                            "WHERE SI.STORE_ID = E.STORE_ID AND E.EMPLOYEE_ID = ?");
-
 
             ps.setInt(1, employeeId);
             resultSet = ps.executeQuery();
-            storeId = resultSet.getInt(1);
+            while (resultSet.next()){
+                storeId = resultSet.getInt(1);
+            }
+
         }  catch (SQLException e){
             e.printStackTrace();
             System.out.println("Failed to retrieve store ID");
@@ -73,6 +77,7 @@ public class SQLMakeOrder {
             ps.setInt(1, newQuantity);
             ps.setInt(2, sku);
             ps.setInt(3, storeId);
+            ps.executeUpdate();
             con.commit();
             ps.close();
         } catch (SQLException e){
@@ -95,7 +100,9 @@ public class SQLMakeOrder {
             ps.setInt(1, sku);
             ps.setInt(2, orderNumber);
             rs = ps.executeQuery();
-            qty = rs.getInt(1);
+            while(rs.next()){
+                qty = rs.getInt(1);
+            }
             ps.close();
         } catch (SQLException e){
             System.out.println("could not obtain order item quantity");
@@ -108,19 +115,18 @@ public class SQLMakeOrder {
         PreparedStatement ps;
         ResultSet items;
         try{
-            ps = con.prepareStatement("SELECT SI.SKU, SI.STOCK_QUANTITY" +
-                                           "FROM STOREITEMS SI, ORDERITEMS OI" +
+            ps = con.prepareStatement("SELECT SI.SKU, SI.STOCK_QUANTITY " +
+                                           "FROM STOREITEMS SI, ORDERITEMS OI " +
                                            "WHERE SI.STORE_ID = ? AND OI.SKU = SI.SKU AND OI.ORDER_NUMBER = ?");
             ps.setInt(1, storeId);
             ps.setInt(2, orderNumber);
             items = ps.executeQuery();
-            ps.close();
-
             while(items.next()){
                 int sku = items.getInt(1);
                 int qty = items.getInt(2);
                 updateStockQuantity(sku, storeId, qty + getOrderItemQuantity(sku, orderNumber));
             }
+            ps.close();
 
         } catch (SQLException e){
             System.out.println("Failed to update stock quantity for order: " + orderNumber);
