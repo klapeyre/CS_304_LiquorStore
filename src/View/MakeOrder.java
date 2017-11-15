@@ -31,6 +31,14 @@ public class MakeOrder extends JFrame{
     private JTextField supplierField;
     private JLabel supplierErrorLabel;
     private JLabel suuplierLabel;
+    private JPanel orderReceivedPanel;
+    private JPanel orderReceivedButtonPanel;
+    private JPanel orderReceivedInputPanel;
+    private JButton orderReceivedButton;
+    private JTextField orderReceivedDateField;
+    private JTextField orderNumberField;
+    private JLabel orderNumberLabel;
+    private JLabel orderReceivedDateLabel;
     private JTable resultsTable;
     private Vector<String> columnNames;
     private SQLMakeOrder makeOrder;
