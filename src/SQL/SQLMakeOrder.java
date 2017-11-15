@@ -32,22 +32,37 @@ public class SQLMakeOrder {
         }
     }
 
-    private void updateStockQuantity(int sku, int newQuantity, int orderNumber){
+    private int findStoreId (int orderNumber){
         PreparedStatement ps;
         ResultSet resultSet;
         int storeId = 0;
-        try{
-            // find out store id
+
+        try {
             ps = con.prepareStatement("select distinct si.store_id" +
-                                           "from storeitems si, employees e" +
-                                           "where si.store_id = e.store_id AND e.employee_id in" +
-                                             "(select e.employee_id" +
-                                              "from employees e, orders o" +
-                                              "where o.employee_id = e.employee_id AND o.order_number = ?)");
+                    "from storeitems si, employees e" +
+                    "where si.store_id = e.store_id AND e.employee_id in" +
+                    "(select e.employee_id" +
+                    "from employees e, orders o" +
+                    "where o.employee_id = e.employee_id AND o.order_number = ?)");
+
             ps.setInt(1, orderNumber);
             resultSet = ps.executeQuery();
             storeId = resultSet.getInt(1);
+        }  catch (SQLException e){
+            System.out.println("Failed to retrieve store ID");
+            try{
+                con.rollback();
+            } catch (SQLException e2){
+                e2.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        return storeId;
+    }
 
+    private void updateStockQuantity(int sku, int storeId, int newQuantity){
+        PreparedStatement ps;
+        try{
             ps = con.prepareStatement("UPDATE STOREITEMS SET STOCK_QUANTITY = ? WHERE SKU = ? AND STORE_ID = ?");
             ps.setInt(1, newQuantity);
             ps.setInt(2, sku);
@@ -63,6 +78,25 @@ public class SQLMakeOrder {
                 System.exit(-1);
             }
         }
+    }
+
+    private void itemsToUpdate(int storeId, int orderNumber){
+        PreparedStatement ps;
+        ResultSet storeItemsInOrder;
+
+        try{
+            ps = con.prepareStatement("SELECT SI.SKU, SI.STOCK_QUANTITY" +
+                                           "FROM STOREITEMS SI, ORDERITEMS OI" +
+                                           "WHERE OI.SKU = SI.SKU AND OI.ORDER_NUMBER = ? AND SI.STORE_ID = ?");
+            ps.setInt(1, orderNumber);
+            ps.setInt(2, storeId);
+
+            storeItemsInOrder = ps.executeQuery();
+
+        } catch (SQLException e){
+
+        }
+
     }
 
     public void makeOrder(int sku, int qty, String supplier, int employeeId) {
@@ -85,9 +119,19 @@ public class SQLMakeOrder {
 
     public void markOrderAsReceived(int orderNumber, Timestamp receiveDate){
         PreparedStatement ps;
-
-
-
-
+        try{
+            ps = con.prepareStatement("UPDATE ORDERS SET TIME_DATE_RECEIVED = ? WHERE ORDER_NUMBER = ? ");
+            ps.setTimestamp(1, receiveDate);
+            ps.setInt(2, orderNumber);
+            ps.executeUpdate();
+            con.commit();
+            ps.close();
+        } catch (SQLException e){
+            try{
+                con.rollback();
+            } catch (SQLException e2){
+                System.out.println("Failed to update order received date, aborting....");
+            }
+        }
     }
 }
