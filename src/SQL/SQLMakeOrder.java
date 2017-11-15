@@ -38,12 +38,12 @@ public class SQLMakeOrder {
         int storeId = 0;
 
         try {
-            ps = con.prepareStatement("select distinct si.store_id" +
-                    "from storeitems si, employees e" +
-                    "where si.store_id = e.store_id AND e.employee_id in" +
-                    "(select e.employee_id" +
-                    "from employees e, orders o" +
-                    "where o.employee_id = e.employee_id AND o.order_number = ?)");
+            ps = con.prepareStatement("SELECT DISTINCT SI.STORE_ID" +
+                                           "FROM STOREITEMS SI, EMPLOYEES E" +
+                                           "WHERE SI.STORE_ID = E.STORE_ID AND E.EMPLOYEE_ID IN" +
+                                           "(SELECT E.EMPLOYEE_ID" +
+                                           "FROM EMPLOYEES E, ORDERS O" +
+                                           "WHERE O.EMPLOYEE_ID = E.EMPLOYEE_ID AND O.ORDER_NUMBER = ?)");
 
             ps.setInt(1, orderNumber);
             resultSet = ps.executeQuery();
@@ -80,23 +80,46 @@ public class SQLMakeOrder {
         }
     }
 
-    private void itemsToUpdate(int storeId, int orderNumber){
+    private int getOrderItemQuantity(int sku, int orderNumber){
         PreparedStatement ps;
-        ResultSet storeItemsInOrder;
+        ResultSet rs;
+        int qty = 0;
+        try{
+            ps = con.prepareStatement("SELECT QUANTITY FROM ORDERITEMS WHERE SKU = ? AND ORDER_NUMBER = ?");
+            ps.setInt(1, sku);
+            ps.setInt(2, orderNumber);
+            rs = ps.executeQuery();
+            qty = rs.getInt(1);
+            ps.close();
+        } catch (SQLException e){
+            System.out.println("could not obtain order item quantity");
+            return -1;
+        }
+        return qty;
+    }
 
+    private void updateItems(int storeId, int orderNumber){
+        PreparedStatement ps;
+        ResultSet items;
         try{
             ps = con.prepareStatement("SELECT SI.SKU, SI.STOCK_QUANTITY" +
                                            "FROM STOREITEMS SI, ORDERITEMS OI" +
-                                           "WHERE OI.SKU = SI.SKU AND OI.ORDER_NUMBER = ? AND SI.STORE_ID = ?");
-            ps.setInt(1, orderNumber);
-            ps.setInt(2, storeId);
+                                           "WHERE SI.STORE_ID = ? AND OI.SKU = SI.SKU AND OI.ORDER_NUMBER = ?");
+            ps.setInt(1, storeId);
+            ps.setInt(2, orderNumber);
+            items = ps.executeQuery();
+            ps.close();
 
-            storeItemsInOrder = ps.executeQuery();
+            while(items.next()){
+                int sku = items.getInt(1);
+                int qty = items.getInt(2);
+                updateStockQuantity(sku, storeId, qty + getOrderItemQuantity(sku, orderNumber));
+            }
 
         } catch (SQLException e){
-
+            System.out.println("Failed to update stock quantity for order: " + orderNumber);
+            System.exit(-1);
         }
-
     }
 
     public void makeOrder(int sku, int qty, String supplier, int employeeId) {
@@ -112,7 +135,7 @@ public class SQLMakeOrder {
             con.commit();
             ps.close();
         } catch(SQLException e){
-            // TODO hanlde this exception
+            // TODO hanlde exception
         }
         addItemToOrder(sku, qty);
     }
@@ -126,6 +149,8 @@ public class SQLMakeOrder {
             ps.executeUpdate();
             con.commit();
             ps.close();
+            int storeId = findStoreId(orderNumber);
+            updateItems(storeId, orderNumber);
         } catch (SQLException e){
             try{
                 con.rollback();
