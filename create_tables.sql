@@ -1,6 +1,6 @@
 create sequence seq_id
-    minvalue 1
-    start with 1
+    minvalue 2000
+    start with 2000
     increment by 1
     cache 10;
 
