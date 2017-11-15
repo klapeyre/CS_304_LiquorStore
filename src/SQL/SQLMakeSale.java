@@ -2,7 +2,9 @@ package SQL;
 
 import View.ViewUtils;
 
+import java.math.RoundingMode;
 import java.sql.*;
+import java.text.DecimalFormat;
 
 public class SQLMakeSale {
     private final Connection con;
@@ -52,6 +54,10 @@ public class SQLMakeSale {
     public Integer makeSale(Integer[][] data, Integer storeID, String paymentType, Integer employeeID) throws SQLException {
 
         Double totalPrice = getTotalPrice(data);
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        String temp = df.format(totalPrice);
+        totalPrice = Double.parseDouble(temp);
         Integer saleNumber = makeNewSale(totalPrice, paymentType, employeeID);
 
         for (int i = 0; i < data.length; i++ ) {
@@ -96,7 +102,7 @@ public class SQLMakeSale {
             System.out.println("Could not get price of item. Message: " + e.getMessage());
             throw e;
         }
-        return (deposit+price)*(1+tax)*quantity;
+        return ((price*tax)+price+deposit)*quantity;
     }
 
     private Integer makeNewSale(Double totalPrice, String paymentType,Integer employeeID) throws SQLException {
