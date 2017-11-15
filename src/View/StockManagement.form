@@ -437,13 +437,13 @@
           <text value="Store ID:"/>
         </properties>
       </component>
-      <component id="285b" class="javax.swing.JLabel" binding="itemRemoveErrorLabel">
+      <component id="285b" class="javax.swing.JLabel" binding="itemSKUErrorLabel">
         <constraints>
-          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="13" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <foreground color="-4515541"/>
-          <text value="Label"/>
+          <text value="SKU has to be a number"/>
           <visible value="false"/>
         </properties>
       </component>

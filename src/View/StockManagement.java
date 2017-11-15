@@ -34,7 +34,7 @@ public class StockManagement {
     private JLabel numberErrorLabel;
     private JButton updateQuantityButton;
     private JTextField storeIdUpdateTextField;
-    private JLabel itemRemoveErrorLabel;
+    private JLabel itemSKUErrorLabel;
     private SQLStockManagement sqlStockManagement;
 
     public StockManagement() {
@@ -113,7 +113,7 @@ public class StockManagement {
                 try {
                     sku = Integer.parseInt(removeItemTextField.getText());
                 } catch (NumberFormatException nfe){
-                    itemRemoveErrorLabel.setVisible(true);
+                    itemSKUErrorLabel.setVisible(true);
                     return;
                 }
                 try{
@@ -131,6 +131,32 @@ public class StockManagement {
 
 
         updateDescriptionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeErrorLabels();
+                Integer sku;
+                String description = newDescriptionTextField.getText();
+                try {
+                    sku = Integer.parseInt(updateItemTextField.getText());
+                } catch (NumberFormatException nfe){
+                    itemSKUErrorLabel.setVisible(true);
+                    return;
+                }
+                try {
+                    sqlStockManagement.updateDescription(sku, description);
+                } catch (UnsupportedOperationException e1){
+                    JOptionPane.showMessageDialog(null, "Item with sku "+sku+" does not exist");
+                    return;
+                } catch (SQLException e1){
+                    JOptionPane.showMessageDialog(null, "Could not update item "+sku+" description. Message:"+e1.getMessage());
+                    return;
+                }
+                JOptionPane.showMessageDialog(null, "Item's description was changed!");
+            }
+        });
+
+
+        updateQuantityButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -152,10 +178,8 @@ public class StockManagement {
     }
 
     private void removeErrorLabels(){
-        itemRemoveErrorLabel.setVisible(false);
+        itemSKUErrorLabel.setVisible(false);
         numberErrorLabel.setVisible(false);
-//        idSalaryErrorLabel.setVisible(false);
-//        salaryErrorLabel.setVisible(false);
     }
 
     public JPanel getPanelSM() {
