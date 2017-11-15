@@ -6,7 +6,7 @@ public class App {
 
     public static void main(String[] args) {
         DatabaseConnection database = new DatabaseConnection();
-        database.establishConnection("ora_i4n0b", "a17677089");
+        database.establishConnection("stub", "stub");
         JFrame frame = new JFrame("Cool App");
         frame.setContentPane(new MainScreen().getPanelMain());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
