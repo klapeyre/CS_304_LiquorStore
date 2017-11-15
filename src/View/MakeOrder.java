@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.util.Vector;
 
 public class MakeOrder extends JFrame{
@@ -35,10 +36,9 @@ public class MakeOrder extends JFrame{
     private JPanel orderReceivedButtonPanel;
     private JPanel orderReceivedInputPanel;
     private JButton orderReceivedButton;
-    private JTextField orderReceivedDateField;
     private JTextField orderNumberField;
     private JLabel orderNumberLabel;
-    private JLabel orderReceivedDateLabel;
+    private JLabel orderNumberErrorLabel;
     private JTable resultsTable;
     private Vector<String> columnNames;
     private SQLMakeOrder makeOrder;
@@ -49,6 +49,7 @@ public class MakeOrder extends JFrame{
         qtyErrorLabel.setVisible(false);
         supplierErrorLabel.setVisible(false);
         employeeIdErrorLabel.setVisible(false);
+        orderNumberErrorLabel.setVisible(false);
         columnNames = new Vector<String>();
         columnNames.add("SKU");
         columnNames.add("Quantity");
@@ -65,7 +66,7 @@ public class MakeOrder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int sku = parseUserInput(skuField, skuErrorLabel, "sku");
                 int qty = parseUserInput(qtyField, qtyErrorLabel, "qty");
-                int employeeId = parseUserInput(employeeIdField, employeeIdErrorLabel, "employeeId");
+                int employeeId = parseUserInput(employeeIdField, employeeIdErrorLabel, "employee Id");
                 String supplier = supplierField.getText();
                 if((sku != -1) && (qty != -1) && (employeeId != -1)){
                     DefaultTableModel model = (DefaultTableModel) resultsTable.getModel();
@@ -101,6 +102,16 @@ public class MakeOrder extends JFrame{
                         makeOrder.makeOrder(sku, qty, supplier, employeeId);
                     }
                 }
+            }
+        });
+
+        orderReceivedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int orderNumber = parseUserInput(orderNumberField, orderNumberErrorLabel, "order #");
+                Timestamp dateReceived = new Timestamp(System.currentTimeMillis());
+
+
             }
         });
     }
