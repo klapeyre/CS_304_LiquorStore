@@ -159,7 +159,31 @@ public class StockManagement {
         updateQuantityButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                removeErrorLabels();
+                Integer sku;
+                Integer quantity;
+                Integer storeID;
+                try {
+                    sku = Integer.parseInt(updateItemTextField.getText());
+                    quantity = Integer.parseInt(newQuantityTextField.getText());
+                    storeID = Integer.parseInt(storeIdUpdateTextField.getText());
+                } catch (NumberFormatException nfe){
+                    itemSKUErrorLabel.setVisible(true);
+                    return;
+                }
+                try {
+                    sqlStockManagement.updateQuantity(sku, quantity, storeID);
+                } catch (UnsupportedOperationException e1){
+                    JOptionPane.showMessageDialog(null, "Item with sku "+sku+" does not exist at store "+storeID);
+                    return;
+                } catch (SQLException e1){
+                    JOptionPane.showMessageDialog(null, "Could not update item "+sku+" quantity. Message:"+e1.getMessage());
+                    return;
+                }
+                JOptionPane.showMessageDialog(null, "Item "+sku+" quantity at store "+storeID+" was changed to"+quantity+"!");
+                updateItemTextField.setText("");
+                newQuantityTextField.setText("");
+                storeIdUpdateTextField.setText("");
             }
         });
     }

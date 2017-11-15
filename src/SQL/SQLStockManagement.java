@@ -81,7 +81,6 @@ public class SQLStockManagement {
         PreparedStatement ps;
 
         try {
-            System.out.println("Message: "+description+"  "+sku);
             ps = con.prepareStatement("UPDATE items SET description = ? WHERE sku = ?");
             ps.setString(1, description);
             ps.setInt(2, sku);
@@ -94,6 +93,35 @@ public class SQLStockManagement {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Updating description failed. Message: "+e.getMessage());
+            try
+            {
+                // undo the insert
+                con.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Message: " + e2.getMessage());
+                System.exit(-1);
+            }
+            throw e;
+        }
+    }
+
+    public void updateQuantity(Integer sku, Integer quantity, Integer storeID) throws SQLException {
+        PreparedStatement ps;
+
+        try {
+            ps = con.prepareStatement("UPDATE storeitems SET stock_quantity = ? WHERE sku = ? AND store_id = ?");
+            ps.setInt(1, quantity);
+            ps.setInt(2, sku);
+            ps.setInt(3, storeID);
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 0) {
+                throw new UnsupportedOperationException();
+            }
+            con.commit();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Updating quantity failed. Message: "+e.getMessage());
             try
             {
                 // undo the insert
