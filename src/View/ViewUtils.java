@@ -2,9 +2,7 @@ package View;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -39,6 +37,7 @@ public final class ViewUtils {
             data.add(vector);
         }
 
+        results.close();
         return new DefaultTableModel(data, columnNames);
     }
 
@@ -57,4 +56,22 @@ public final class ViewUtils {
 
         return null;
     }
+
+    public static int getSequenceNumber(Connection con) throws SQLException {
+        Statement stmt;
+        ResultSet rs;
+        try{
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT seq_id.currval FROM DUAL");
+            rs.next();
+            int id = rs.getInt("CURRVAL");
+            stmt.close();
+            return id;
+        } catch (SQLException e){
+            System.out.println("Could not get sequence number. Message: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
 }
