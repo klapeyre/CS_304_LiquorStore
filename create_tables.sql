@@ -1,3 +1,11 @@
+create sequence seq_id
+    minvalue 1
+    start with 1
+    increment by 1
+    cache 10;
+
+commit;
+
 create table stores (
     store_id int not null,
     address varchar(30),
@@ -67,15 +75,23 @@ commit;
 create table employees (
     employee_id int not null,
     name varchar(30),
-    username varchar(10),
+    username varchar(10) unique,
     password varchar(10),
     salary double precision,
     store_id int not null,
-    type int,
+    type varchar(10),
     primary key (employee_id),
     foreign key (store_id) references stores);
 
 grant select on employees to public;
+
+commit;
+
+create view clerk_view(name, store_id) as
+select name, store_id
+from employees;
+
+grant select on clerk_view to public;
 
 commit;
 
@@ -107,7 +123,7 @@ commit;
 create table store_sales (
     sale_number int not null,
     total_price double precision,
-    payment_type varchar(5),
+    payment_type varchar(6),
     sale_date timestamp,
     employee_id int not null,
     primary key (sale_number),

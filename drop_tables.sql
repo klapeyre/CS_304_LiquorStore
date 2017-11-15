@@ -16,6 +16,8 @@ drop table orders;
 -- depends on employees
 drop table store_sales;
 -- depends on employees
+drop view clerk_view;
+-- depends on employees;
 drop table employees;
 -- depends on stores
 drop table stores;

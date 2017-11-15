@@ -13,13 +13,5 @@ public class App {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-
-        try {// TODO remove eventually
-            Thread.sleep(6000000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.exit(0);
     }
 }
