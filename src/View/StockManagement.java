@@ -3,6 +3,8 @@ package View;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import SQL.SQLStockManagement;
 
 public class StockManagement {
@@ -27,9 +29,12 @@ public class StockManagement {
     private JTextField quantityTextField;
     private JTextField updateItemTextField;
     private JTextField newDescriptionTextField;
-    private JButton updateButton;
+    private JButton updateDescriptionButton;
     private JTextField newQuantityTextField;
     private JLabel numberErrorLabel;
+    private JButton updateQuantityButton;
+    private JTextField storeIdUpdateTextField;
+    private JLabel itemRemoveErrorLabel;
     private SQLStockManagement sqlStockManagement;
 
     public StockManagement() {
@@ -41,7 +46,7 @@ public class StockManagement {
         addNewItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                numberErrorLabel.setVisible(false);
+                removeErrorLabels();
                 String name = nameTextField.getText();
                 String description = descriptionTextField.getText();
                 Integer storeID;
@@ -103,16 +108,29 @@ public class StockManagement {
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String itemToRemoveID = removeItemTextField.getText();
-                //TODO remove
-                //removeItem(itemToRemoveID);
-                //TODO check if everything was fine then
-                JOptionPane.showMessageDialog(null, "Item was removed!");
+                removeErrorLabels();
+                int sku;
+                try {
+                    sku = Integer.parseInt(removeItemTextField.getText());
+                } catch (NumberFormatException nfe){
+                    itemRemoveErrorLabel.setVisible(true);
+                    return;
+                }
+                try{
+                    sqlStockManagement.removeItem(sku);
+                } catch (UnsupportedOperationException e1){
+                    JOptionPane.showMessageDialog(null, "Item with sku "+sku+" does not exist");
+                    return;
+                } catch (SQLException e1){
+                    JOptionPane.showMessageDialog(null, "Could not delete item "+sku+". Message: "+e1.getMessage());
+                    return;
+                }
+                JOptionPane.showMessageDialog(null, "Item, and all rows referencing it, was removed!");
             }
         });
 
 
-        updateButton.addActionListener(new ActionListener() {
+        updateDescriptionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -131,6 +149,13 @@ public class StockManagement {
             }
         }
         return value;
+    }
+
+    private void removeErrorLabels(){
+        itemRemoveErrorLabel.setVisible(false);
+        numberErrorLabel.setVisible(false);
+//        idSalaryErrorLabel.setVisible(false);
+//        salaryErrorLabel.setVisible(false);
     }
 
     public JPanel getPanelSM() {

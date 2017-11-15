@@ -3,19 +3,16 @@ import java.io.IOException;
 import java.sql.*;
 
 public class SQLStockManagement {
-
-    // Need to figure out how we're going to handle different item tables
-    // assuming Beer for now
+    private final Connection con;
 
     public SQLStockManagement() {
-
+        con = DatabaseConnection.getConnection();
     }
 
     private void insertBeer(int sku, String name, double tax, double deposit,
                             double price, String company, String region, double percentage,
                             String type, double volume, String description, int quantity) {
 
-        Connection con = DatabaseConnection.getConnection(); // Need error handling if connection does not exist
         PreparedStatement ps;
 
         try {
@@ -53,4 +50,34 @@ public class SQLStockManagement {
             }
         }
     }
+
+    public void removeItem(Integer sku) throws SQLException {
+        PreparedStatement ps;
+
+        try {
+            System.out.println("here ?? sku "+sku);
+            ps = con.prepareStatement("DELETE FROM items WHERE sku = ?");
+            ps.setInt(1, sku);
+
+            int rowCount = ps.executeUpdate();
+            System.out.println("here ??"+rowCount);
+
+            if (rowCount == 0) {
+                throw new UnsupportedOperationException();
+            }
+            con.commit();
+            ps.close();
+
+        } catch (SQLException e) {
+            try {
+                con.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Message: " + e2.getMessage());
+                System.exit(-1);
+            }
+            throw e;
+        }
+    }
+
+
 }
