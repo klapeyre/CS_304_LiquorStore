@@ -53,6 +53,17 @@ public class MainScreen {
                 frame.setVisible(true);
             }
         });
+        viewSalesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("View Sales");
+                frame.setContentPane(new ViewSales().getPanelVS());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
         viewEmployeesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
