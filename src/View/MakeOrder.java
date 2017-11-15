@@ -110,8 +110,7 @@ public class MakeOrder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int orderNumber = parseUserInput(orderNumberField, orderNumberErrorLabel, "order #");
                 Timestamp dateReceived = new Timestamp(System.currentTimeMillis());
-
-
+                makeOrder.markOrderAsReceived(orderNumber, dateReceived);
             }
         });
     }
