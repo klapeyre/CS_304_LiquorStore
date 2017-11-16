@@ -89,19 +89,14 @@ public class MakeOrder extends JFrame{
         placeOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int numberOfItems = 0;
+                int orderNumber = 0;
                 DefaultTableModel model = (DefaultTableModel) resultsTable.getModel();
-                int rowCount = resultsTable.getRowCount();
                 Vector<Vector<Object>> tableContents = model.getDataVector();
-
-                if(rowCount != 0){
-                    for (Vector<Object> order : tableContents){
-                        int sku = (int)order.get(0);
-                        int qty = (int)order.get(1);
-                        String supplier = (String)order.get(2);
-                        int employeeId = (int)order.get(3);
-                        makeOrder.makeOrder(sku, qty, supplier, employeeId);
-                    }
-                }
+                numberOfItems = model.getRowCount();
+                orderNumber = makeOrder.makeOrder(tableContents, numberOfItems);
+                JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " placed successfully!");
+                model.setRowCount(0);
             }
         });
 
@@ -111,6 +106,8 @@ public class MakeOrder extends JFrame{
                 int orderNumber = parseUserInput(orderNumberField, orderNumberErrorLabel, "order #");
                 Timestamp dateReceived = new Timestamp(System.currentTimeMillis());
                 makeOrder.markOrderAsReceived(orderNumber, dateReceived);
+                JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " received on " + dateReceived.toString());
+
             }
         });
     }

@@ -2,6 +2,7 @@ package SQL;
 
 import View.ViewUtils;
 import java.sql.*;
+import java.util.Vector;
 
 public class SQLMakeOrder {
     private final Connection con;
@@ -136,28 +137,45 @@ public class SQLMakeOrder {
         }
     }
 
-    public void makeOrder(int sku, int qty, String supplier, int employeeId) {
+    public int makeOrder(Vector<Vector<Object>> tableContents, int numberOfItems) {
+        int orderNum = 0;
         PreparedStatement ps;
         Timestamp datePlaced = new Timestamp(System.currentTimeMillis());
 
-        try{
-            ps = con.prepareStatement("INSERT INTO orders VALUES (seq_id.NEXTVAL, ?, ?, NULL, ?)");
-            ps.setString(1, supplier);
-            ps.setTimestamp(2, datePlaced);
-            ps.setInt(3, employeeId);
-            ps.executeUpdate();
-            con.commit();
-            ps.close();
-        } catch(SQLException e){
-            System.out.println("Failed to update orders table for sku: " + sku);
-            try{
-                con.rollback();
-            } catch (SQLException e2){
-                e2.printStackTrace();
-                System.exit(-1);
+        if(numberOfItems != 0) {
+            String supplier = (String) tableContents.get(0).get(2);
+            int employeeId = (int) tableContents.get(0).get(3);
+            try {
+                ps = con.prepareStatement("INSERT INTO orders VALUES (seq_id.NEXTVAL, ?, ?, NULL, ?)");
+                ps.setString(1, supplier);
+                ps.setTimestamp(2, datePlaced);
+                ps.setInt(3, employeeId);
+                ps.executeUpdate();
+                con.commit();
+                ps.close();
+            } catch (SQLException e) {
+                System.out.println("Failed to update orders table");
+                try {
+                    con.rollback();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                    System.exit(-1);
+                }
             }
         }
-        addItemToOrder(sku, qty);
+
+        for (Vector<Object> order : tableContents) {
+            int sku = (int) order.get(0);
+            int qty = (int) order.get(1);
+            addItemToOrder(sku, qty);
+        }
+
+        try {
+            orderNum = ViewUtils.getSequenceNumber(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderNum;
     }
 
     public void markOrderAsReceived(int orderNumber, Timestamp receiveDate){
