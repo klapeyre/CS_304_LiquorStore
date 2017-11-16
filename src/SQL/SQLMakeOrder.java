@@ -1,6 +1,8 @@
 package SQL;
 
 import View.ViewUtils;
+import oracle.sql.TIMESTAMP;
+import javax.swing.*;
 import java.sql.*;
 import java.util.Vector;
 
@@ -178,17 +180,45 @@ public class SQLMakeOrder {
         return orderNum;
     }
 
-    public void markOrderAsReceived(int orderNumber, Timestamp receiveDate){
+    public void markOrderAsReceived(int orderNumber, Timestamp dateReceived){
         PreparedStatement ps;
+        boolean orderExists = false;
+        TIMESTAMP orderInfo = null;  // ORACLE.SQL.TIMESTAMP
+
+        try{
+            // check if order exists
+            ps = con.prepareStatement("SELECT ORDER_NUMBER, TIME_DATE_RECEIVED FROM ORDERS WHERE ORDER_NUMBER = ?");
+            ps.setInt(1, orderNumber);
+            ResultSet order = ps.executeQuery();
+            while(order.next()){
+                orderInfo = (TIMESTAMP) order.getObject(2);
+                orderExists = true;
+            }
+            if(!orderExists){
+                JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " does not exist");
+                return;
+            }
+            // check if order has already been received by checking the date received Timestamp
+            if(orderInfo != null){
+                JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " has already been marked as received");
+                return;
+            }
+        } catch (SQLException e){
+            System.out.println("Failed to check if order#: " + orderNumber + " exists");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
         try{
             ps = con.prepareStatement("UPDATE ORDERS SET TIME_DATE_RECEIVED = ? WHERE ORDER_NUMBER = ? ");
-            ps.setTimestamp(1, receiveDate);
+            ps.setTimestamp(1, dateReceived);
             ps.setInt(2, orderNumber);
             ps.executeUpdate();
             con.commit();
             ps.close();
             int storeId = findStoreId(orderNumber);
             updateItems(storeId, orderNumber);
+            JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " received on " + dateReceived.toString());
         } catch (SQLException e){
             try{
                 con.rollback();
