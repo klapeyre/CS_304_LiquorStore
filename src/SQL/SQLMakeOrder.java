@@ -27,6 +27,7 @@ public class SQLMakeOrder {
                 // May happen due to a database error or a closed connection, so a restart may fix it
                 System.out.println("Failed to roll back adding an item to the order, aborting....");
                 DatabaseConnection.closeConnection();
+                e2.printStackTrace();
                 System.exit(-1);
             }
         }
@@ -106,7 +107,8 @@ public class SQLMakeOrder {
             ps.close();
         } catch (SQLException e){
             System.out.println("could not obtain order item quantity");
-            return -1;
+            e.printStackTrace();
+            System.exit(-1);
         }
         return qty;
     }
@@ -147,7 +149,13 @@ public class SQLMakeOrder {
             con.commit();
             ps.close();
         } catch(SQLException e){
-            // TODO hanlde exception
+            System.out.println("Failed to update orders table for sku: " + sku);
+            try{
+                con.rollback();
+            } catch (SQLException e2){
+                e2.printStackTrace();
+                System.exit(-1);
+            }
         }
         addItemToOrder(sku, qty);
     }
@@ -168,6 +176,8 @@ public class SQLMakeOrder {
                 con.rollback();
             } catch (SQLException e2){
                 System.out.println("Failed to update order received date, aborting....");
+                e2.printStackTrace();
+                System.exit(-1);
             }
         }
     }
