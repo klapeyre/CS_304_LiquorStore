@@ -22,4 +22,5 @@ drop table employees;
 -- depends on stores
 drop table stores;
 -- no dependencies
+drop sequence seq_id;
 commit;
