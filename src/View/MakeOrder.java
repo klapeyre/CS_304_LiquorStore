@@ -95,7 +95,12 @@ public class MakeOrder extends JFrame{
                 Vector<Vector<Object>> tableContents = model.getDataVector();
                 numberOfItems = model.getRowCount();
                 orderNumber = makeOrder.makeOrder(tableContents, numberOfItems);
-                JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " placed successfully!");
+                if (orderNumber == 0){
+                    JOptionPane.showMessageDialog(null, "Order was not placed");
+                } else{
+                    JOptionPane.showMessageDialog(null, "Order #" + orderNumber + " placed successfully!");
+                }
+                // clear table after order placement is complete
                 model.setRowCount(0);
             }
         });

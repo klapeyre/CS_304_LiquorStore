@@ -13,7 +13,37 @@ public class SQLMakeOrder {
         con = DatabaseConnection.getConnection();
     }
 
+    private int checkItemExists(int sku, int displayMessageOption){
+        PreparedStatement ps;
+        boolean itemExists = false;
+        try{
+            // check if item sku exists
+            ps = con.prepareStatement("SELECT DISTINCT SKU FROM STOREITEMS WHERE SKU = ?");
+            ps.setInt(1, sku);
+            ResultSet item = ps.executeQuery();
+            while(item.next()){
+                itemExists = true;
+            }
+            if(!itemExists){
+                if (displayMessageOption == 1) {
+                    JOptionPane.showMessageDialog(null, "Item #" + sku + " does not exist \n" +
+                            "press OK to continue with the rest of this order");
+                }
+                return 0;
+            }
+        } catch (SQLException e){
+            System.out.println("Failed to check if SKU #" + sku + " exists");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return 1;
+    }
+
     private void addItemToOrder(int sku, int qty){
+        if (checkItemExists(sku, 0) == 0){
+            return;
+        }
+
         PreparedStatement ps;
         try{
             ps = con.prepareStatement("INSERT INTO ORDERITEMS VALUES (?, ?, ?)");
@@ -145,10 +175,16 @@ public class SQLMakeOrder {
         Timestamp datePlaced = new Timestamp(System.currentTimeMillis());
 
         if(numberOfItems != 0) {
+            // if order consists only of a single item that does not exist, then return 0
+            int sku = (int) tableContents.get(0).get(0);
+            if(numberOfItems == 1 && checkItemExists(sku, 1) == 0){
+                return 0;
+            }
+
             String supplier = (String) tableContents.get(0).get(2);
             int employeeId = (int) tableContents.get(0).get(3);
             try {
-                ps = con.prepareStatement("INSERT INTO orders VALUES (seq_id.NEXTVAL, ?, ?, NULL, ?)");
+                ps = con.prepareStatement("INSERT INTO ORDERS VALUES (SEQ_ID.NEXTVAL, ?, ?, NULL, ?)");
                 ps.setString(1, supplier);
                 ps.setTimestamp(2, datePlaced);
                 ps.setInt(3, employeeId);
