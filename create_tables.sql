@@ -6,13 +6,6 @@ create sequence seq_id
 
 commit;
 
-create sequence seq_orderNum
-    minvalue 1
-    start with 1
-    increment by 1
-    cache 10;
-commit;    
-
 create table stores (
     store_id int not null,
     address varchar(30),
