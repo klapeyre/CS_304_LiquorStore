@@ -104,6 +104,17 @@ public class MainScreen {
                 frame.setVisible(true);
             }
         });
+        reportsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Reports");
+                frame.setContentPane(new GenerateReports().getGenerateReportsMainPanel());
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
     }
 
     public JPanel getPanelMain() {
