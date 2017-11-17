@@ -69,6 +69,13 @@ public class MainScreen {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame("Make Sale");
                 frame.setContentPane(new MakeSale().getPanelMS());
+            }
+        });
+        viewOrdersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("View Orders");
+                frame.setContentPane(new ViewOrders().getViewOrdersPanel());
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
