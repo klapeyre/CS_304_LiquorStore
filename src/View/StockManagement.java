@@ -85,21 +85,23 @@ public class StockManagement {
                 System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+storeID+" "+percentage+" "+type+" "+region+" "+company+" "+quantity);
 
                 if (beerRadioButton.isSelected()){
-                    //TODO insert beer
-                    //insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
+                    //sqlStockManagement.insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
                     //TODO check if everything was fine then
                     JOptionPane.showMessageDialog(null, "New beer was added!");
                 } else if (wineRadioButton.isSelected()){
                     String subtype = subtypeTextField.getText();
-                    //TODO insert wine
-                    //insertWine(name, tax, deposit, price, description, storeID, percentage, type, region, company, subtype); //Don't forget to insert into Item table too
+                    //sqlStockManagement.insertWine(name, tax, deposit, price, description, storeID, percentage, type, region, company, subtype); //Don't forget to insert into Item table too
                     //TODO check if everything was fine then
                     JOptionPane.showMessageDialog(null, "New wine was added!");
                 } else {
-                    //TODO insert nonalcoholic
-                    //insertNonAlcoholicItem(name, tax, deposit, price, description, storeID);
-                    //TODO check if everything was fine then
-                    JOptionPane.showMessageDialog(null, "New item was added!");
+                    Integer sku;
+                    try {
+                        sku = sqlStockManagement.insertItem(name, tax, deposit, price, description);
+                    } catch (SQLException e1) {
+                        JOptionPane.showMessageDialog(null, "Item could not be added. Message: "+e1.getMessage());
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(null, "New item sku "+sku+" was added!");
                 }
             }
         });
