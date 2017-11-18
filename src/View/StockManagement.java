@@ -35,6 +35,7 @@ public class StockManagement {
     private JButton updateQuantityButton;
     private JTextField storeIdUpdateTextField;
     private JLabel itemSKUErrorLabel;
+    private JTextField volumeTextField;
     private SQLStockManagement sqlStockManagement;
 
     public StockManagement() {
@@ -57,6 +58,7 @@ public class StockManagement {
                 Double price;
                 Double percentage;
                 Integer packQuantity;
+                Integer volume;
 
                 try {
                     tax = getTextFieldForDouble(taxTextField);
@@ -64,6 +66,9 @@ public class StockManagement {
                     price = getTextFieldForDouble(priceTextFieldTextField);
                     percentage = getTextFieldForDouble(alcoholPercentageTextField);
                     packQuantity = null;
+                    volume = null;
+                    if (getTextFieldForDouble(volumeTextField) != null)
+                        volume = getTextFieldForDouble(volumeTextField).intValue();
                     if (getTextFieldForDouble(packQuantityTextField) != null)
                         packQuantity = getTextFieldForDouble(packQuantityTextField).intValue();
                 } catch (UnsupportedOperationException uoe){
@@ -73,9 +78,14 @@ public class StockManagement {
                 System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+percentage+" "+type+" "+region+" "+company);
 
                 if (beerRadioButton.isSelected()){
-                    //sqlStockManagement.insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
-                    //TODO check if everything was fine then
-                    JOptionPane.showMessageDialog(null, "New beer was added!");
+                    Integer sku;
+                    try {
+                        sku = sqlStockManagement.insertBeer(name, tax, deposit, price, description, percentage, type, region, company, volume, packQuantity);
+                    } catch (SQLException e1) {
+                        JOptionPane.showMessageDialog(null, "Beer could not be added. Message: "+e1.getMessage());
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(null, "New beer sku "+sku+" was added!");
                 } else if (wineRadioButton.isSelected()){
                     String subtype = subtypeTextField.getText();
                     //sqlStockManagement.insertWine(name, tax, deposit, price, description, storeID, percentage, type, region, company, subtype); //Don't forget to insert into Item table too

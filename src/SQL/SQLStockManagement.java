@@ -54,6 +54,53 @@ public class SQLStockManagement {
         return ViewUtils.getSequenceNumber(con);
     }
 
+    public int insertBeer(String name, Double tax, Double deposit, Double price, String description, Double percentage,
+                          String type, String region, String company, Integer volume, Integer packQuantity) throws SQLException {
+
+        Integer sku = insertItem(name, tax, deposit, price, description);
+
+        PreparedStatement ps;
+
+        try {
+            ps = con.prepareStatement("INSERT INTO beers VALUES (?,?,?,?,?,?,?)");
+            ps.setInt(1, sku);
+            ps.setString(2, company);
+            ps.setString(3, region);
+            if (percentage == null){
+                ps.setNull(4, java.sql.Types.DOUBLE);
+            } else {
+                ps.setDouble(4, percentage);
+            }
+            ps.setString(5, type);
+            if (volume == null){
+                ps.setNull(6, java.sql.Types.DOUBLE);
+            } else {
+                ps.setDouble(6, volume);
+            }
+            if (packQuantity == null){
+                ps.setNull(7, java.sql.Types.DOUBLE);
+            } else {
+                ps.setDouble(7, packQuantity);
+            }
+
+            ps.executeUpdate();
+            con.commit();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Inserting beer failed. Message: "+e.getMessage());
+            try
+            {
+                // undo the insert
+                con.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Message: " + e2.getMessage());
+                System.exit(-1);
+            }
+            throw e;
+        }
+        return ViewUtils.getSequenceNumber(con);
+    }
+
     public void removeItem(Integer sku) throws SQLException {
         PreparedStatement ps;
 
