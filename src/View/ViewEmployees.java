@@ -15,9 +15,13 @@ public class ViewEmployees {
     private JLabel employeeLabel;
     private JLabel errorLabel;
     private JScrollPane resultsPane;
+    private JRadioButton managerRadioButton;
+    private JRadioButton clerkRadioButton;
+    private ButtonGroup employeeButtons;
     private SQLViewEmployees viewEmployees;
 
     public ViewEmployees() {
+        employeeButtons = setAndGroupButtons(managerRadioButton, clerkRadioButton);
         viewEmployees = new SQLViewEmployees();
         errorLabel.setVisible(false);
         searchButton.addActionListener(new ActionListener() {
@@ -25,14 +29,26 @@ public class ViewEmployees {
             public void actionPerformed(ActionEvent e) {
                 int id = parseUserInput(employeeIDField, errorLabel, "ID");
                 try {
-                    setTableInScrollPane(new JTable(
-                            ViewUtils.buildResultsTableModel(viewEmployees.searchById(id))
-                    ));
+                    if (managerRadioButton.isSelected()) {
+                        setTableInScrollPane(new JTable(
+                                ViewUtils.buildResultsTableModel(viewEmployees.searchById(id, true))));
+                    } else {
+                        setTableInScrollPane(new JTable(
+                                ViewUtils.buildResultsTableModel(viewEmployees.searchById(id, false))));
+                    }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
             }
         });
+    }
+
+    private ButtonGroup setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
+        ButtonGroup group = new ButtonGroup();
+        group.add(brother);
+        group.add(sister);
+        brother.setSelected(true);
+        return group;
     }
 
     private void setTableInScrollPane(JTable table) {
