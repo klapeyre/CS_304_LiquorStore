@@ -3,10 +3,15 @@ package View;
 import SQL.SQLSearchStock;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class SearchStock extends JFrame {
@@ -22,7 +27,6 @@ public class SearchStock extends JFrame {
     private JComboBox storeNames;
     private JRadioButton beforeTaxRadioButton;
     private JRadioButton afterTaxRadioButton;
-    private ButtonGroup taxGroupButtons;
     private JButton beerSearchButton;
     private JComboBox beerTypes;
     private JLabel taxLabel;
@@ -33,7 +37,7 @@ public class SearchStock extends JFrame {
     public SearchStock() {
         search = new SQLSearchStock();
         skuErrorLabel.setVisible(false);
-        taxGroupButtons = setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
+        setAndGroupButtons(beforeTaxRadioButton, afterTaxRadioButton); // allows user to only select one button at a time
         populateStoreDropDown();
         populateTypeDropDown("Beers");
         populateTypeDropDown("Wines");
@@ -48,10 +52,10 @@ public class SearchStock extends JFrame {
                 String store = (String) storeNames.getSelectedItem();
                 try {
                     if (afterTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, true, store))));
                     } else {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectBySKU(sku, false, store))));
                     }
                 } catch (SQLException e1) {
@@ -67,10 +71,10 @@ public class SearchStock extends JFrame {
                 String store = (String) storeNames.getSelectedItem();
                 try {
                     if (afterTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectByName(name, true, store))));
                     } else {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(search.selectByName(name, false, store))));
 
                     }
@@ -89,11 +93,11 @@ public class SearchStock extends JFrame {
                 String store = (String) storeNames.getSelectedItem();
                 try {
                     if (afterTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(
                                         search.selectByBeer(type, store, true))));
                     } else {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(
                                         search.selectByBeer(type, store, false))));
                     }
@@ -112,11 +116,11 @@ public class SearchStock extends JFrame {
                 String store = (String) storeNames.getSelectedItem();
                 try {
                     if (afterTaxRadioButton.isSelected()) {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(
                                         search.selectByWine(type, store, true))));
                     } else {
-                        setTableInScrollPane(new JTable
+                        setTableSorterInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(
                                         search.selectByWine(type, store, false))));
                     }
@@ -130,12 +134,11 @@ public class SearchStock extends JFrame {
         });
     }
 
-    private ButtonGroup setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
+    private void setAndGroupButtons(JRadioButton brother, JRadioButton sister) {
         ButtonGroup group = new ButtonGroup();
         group.add(brother);
         group.add(sister);
         brother.setSelected(true);
-        return group;
     }
 
     private void populateStoreDropDown() {
@@ -169,12 +172,38 @@ public class SearchStock extends JFrame {
         }
     }
 
-    private void setTableInScrollPane(JTable table) {
+    private void setTableSorterInScrollPane(JTable table) {
+        setTableSorter(table);
         table.setPreferredScrollableViewportSize(new Dimension(400, 100));
         resultsPane.setViewportView(table);
     }
 
+    private void setTableSorter(JTable table) {
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+        // sort first and last two columns - they will always be BigDecimals
+        sorter.setComparator(table.getColumnCount() - 1, new IntComparator());
+        sorter.setComparator(table.getColumnCount() - 2, new IntComparator());
+        sorter.setComparator(0, new IntComparator());
+        table.setRowSorter(sorter);
+    }
 
+
+    class IntComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            BigDecimal num1 = (BigDecimal) o1;
+            BigDecimal num2 = (BigDecimal) o2;
+            num1 = num1.setScale(0, RoundingMode.HALF_UP);
+            num2 = num2.setScale(0, RoundingMode.HALF_UP);
+            Integer int1 = num1.intValueExact();
+            Integer int2 = num2.intValueExact();
+            return int1.compareTo(int2);
+        }
+
+        public boolean equals(Object o2) {
+            return this.equals(o2);
+        }
+    }
+    
     private int parseUserInput(JTextField inputField, JLabel errorLabel, String id) {
         int value = 0;
         try {
@@ -193,5 +222,4 @@ public class SearchStock extends JFrame {
     public JPanel getSearchStockPanel() {
         return searchStockPanel;
     }
-
 }

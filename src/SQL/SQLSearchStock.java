@@ -18,12 +18,12 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax + i.deposit as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price + i.price * i.tax + i.deposit as price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.sku = ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.sku = ? AND s.name LIKE ? ");
         }
@@ -36,12 +36,12 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax + i.deposit as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price + i.price * i.tax + i.deposit as price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         }
