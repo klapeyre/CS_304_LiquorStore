@@ -49,7 +49,6 @@ public class StockManagement {
                 removeErrorLabels();
                 String name = nameTextField.getText();
                 String description = descriptionTextField.getText();
-                Integer storeID;
                 String type = typeTextField.getText();
                 String region = regionTextField.getText();
                 String company = companyTextField.getText();
@@ -57,32 +56,21 @@ public class StockManagement {
                 Double deposit;
                 Double price;
                 Double percentage;
-                Integer quantity;
                 Integer packQuantity;
-
-                try {
-                    storeID = Integer.parseInt(storeIDTextField.getText());
-                } catch (NumberFormatException nfe){
-                    numberErrorLabel.setVisible(true);
-                    return;
-                }
 
                 try {
                     tax = getTextFieldForDouble(taxTextField);
                     deposit = getTextFieldForDouble(depositTextField);
                     price = getTextFieldForDouble(priceTextFieldTextField);
                     percentage = getTextFieldForDouble(alcoholPercentageTextField);
-                    quantity = null;
                     packQuantity = null;
-                    if (getTextFieldForDouble(quantityTextField) != null)
-                        quantity = getTextFieldForDouble(quantityTextField).intValue();
                     if (getTextFieldForDouble(packQuantityTextField) != null)
                         packQuantity = getTextFieldForDouble(packQuantityTextField).intValue();
                 } catch (UnsupportedOperationException uoe){
                     return;
                 }
 
-                System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+storeID+" "+percentage+" "+type+" "+region+" "+company+" "+quantity);
+                System.out.println(name+" "+tax+" "+deposit+" "+price+" "+description+" "+percentage+" "+type+" "+region+" "+company);
 
                 if (beerRadioButton.isSelected()){
                     //sqlStockManagement.insertBeer(name, tax, deposit, price, description, storeID, percentage, type, region, company, packQuantity);
@@ -154,6 +142,8 @@ public class StockManagement {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Item's description was changed!");
+                updateItemTextField.setText("");
+                newDescriptionTextField.setText("");
             }
         });
 
@@ -182,7 +172,7 @@ public class StockManagement {
                     JOptionPane.showMessageDialog(null, "Could not update item "+sku+" quantity. Message:"+e1.getMessage());
                     return;
                 }
-                JOptionPane.showMessageDialog(null, "Item "+sku+" quantity at store "+storeID+" was changed to"+quantity+"!");
+                JOptionPane.showMessageDialog(null, "Item "+sku+" quantity at store "+storeID+" was changed to "+quantity+"!");
                 updateItemTextField.setText("");
                 newQuantityTextField.setText("");
                 storeIdUpdateTextField.setText("");
