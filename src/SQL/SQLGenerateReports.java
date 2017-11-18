@@ -10,7 +10,7 @@ public class SQLGenerateReports {
         con = DatabaseConnection.getConnection();
     }
 
-    private int addOrdersToReport(ResultSet rs, int storeId, Date startDate, Date endDate){
+    private int addReport(ResultSet rs, int storeId, Date startDate, Date endDate){
         int ordersAdded = 0;
         PreparedStatement ps;
         try{
@@ -47,9 +47,9 @@ public class SQLGenerateReports {
         PreparedStatement ps;
         ResultSet rs;
         try{
-            ps = con.prepareStatement("SELECT O.TIME_DATE_PLACED as \"Date placed\", " +
-                                            "O.TIME_DATE_RECEIVED as \"Date received\", " +
-                                            "SUM(OI.QUANTITY * I.PRICE) AS \"ORDER TOTAL\" " +
+            ps = con.prepareStatement("SELECT O.TIME_DATE_PLACED as \"Start date\", " +
+                                            "O.TIME_DATE_RECEIVED as \"End date\", " +
+                                            "SUM(OI.QUANTITY * I.PRICE) AS \"ORDER TOTAL\" " +   // TODO revisit price calculation
                                             "FROM ORDERITEMS OI, ORDERS O, EMPLOYEES E, ITEMS I " +
                                             "WHERE E.STORE_ID = 1 AND " +
                                             "O.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
@@ -58,7 +58,7 @@ public class SQLGenerateReports {
                                             "O.TIME_DATE_RECEIVED IS NOT NULL " +
                                             "GROUP BY O.TIME_DATE_PLACED , O.TIME_DATE_RECEIVED");
             rs = ps.executeQuery();
-            addOrdersToReport(rs, storeId, startDate, endDate);
+            addReport(rs, storeId, startDate, endDate);
             ps.close();
         } catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Failed to obtain list of orders to include in report");
