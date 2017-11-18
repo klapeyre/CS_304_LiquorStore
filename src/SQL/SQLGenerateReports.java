@@ -10,8 +10,32 @@ public class SQLGenerateReports {
         con = DatabaseConnection.getConnection();
     }
 
-    private int addOrdersToReport(ResultSet rs){
-
+    private int addOrdersToReport(ResultSet rs, int storeId, Date startDate, Date endDate){
+        int ordersAdded = 0;
+        PreparedStatement ps;
+        try{
+            while(rs.next()){
+                ps = con.prepareStatement("INSERT INTO REPORTS VALUES (SEQ_ID.NEXTVAL, ?, ?, ?, ?, ?, ?)");
+                ps.setDate(1, startDate);
+                ps.setDate(2, endDate);
+                ps.setInt(3, storeId);
+                ps.setInt(4, 0);
+                ps.setInt(5, rs.getInt(3));
+                int a = rs.getInt(3);
+                ps.setInt(6, 0);
+                ps.executeUpdate();
+                ordersAdded++;
+            }
+        } catch (SQLException e){
+            System.out.println("Failed to update reports table");
+            try {
+                con.rollback();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        return ordersAdded;
     }
 
     public void generateWagesReport(int storeId, Date startDate, Date endDate){
@@ -23,8 +47,8 @@ public class SQLGenerateReports {
         PreparedStatement ps;
         ResultSet rs;
         try{
-            ps = con.prepareStatement("SELECT O.TIME_DATE_PLACED as \"Time placed\", " +
-                                            "O.TIME_DATE_RECEIVED as \"Time received\", " +
+            ps = con.prepareStatement("SELECT O.TIME_DATE_PLACED as \"Date placed\", " +
+                                            "O.TIME_DATE_RECEIVED as \"Date received\", " +
                                             "SUM(OI.QUANTITY * I.PRICE) AS \"ORDER TOTAL\" " +
                                             "FROM ORDERITEMS OI, ORDERS O, EMPLOYEES E, ITEMS I " +
                                             "WHERE E.STORE_ID = 1 AND " +
@@ -34,21 +58,20 @@ public class SQLGenerateReports {
                                             "O.TIME_DATE_RECEIVED IS NOT NULL " +
                                             "GROUP BY O.TIME_DATE_PLACED , O.TIME_DATE_RECEIVED");
             rs = ps.executeQuery();
+            addOrdersToReport(rs, storeId, startDate, endDate);
             ps.close();
         } catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Failed to obtain list of orders to include in report");
             e.printStackTrace();
             return;
         }
-
-        addOrdersToReport(ResultSet rs);
     }
 
     public void generareSalesReport(int storeId, Date startDate, Date endDate){
 
     }
 
-    public ResultSet viewWagesReport(int storeId, Date startDate, Date endDate){
+  /*  public ResultSet viewWagesReport(int storeId, Date startDate, Date endDate){
         ResultSet result;
 
         return result;
@@ -65,5 +88,6 @@ public class SQLGenerateReports {
 
         return result;
     }
+    */
 
 }

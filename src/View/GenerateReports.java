@@ -83,7 +83,7 @@ public class GenerateReports {
                 Date startDate = Date.valueOf(start_Date);
                 Date endDate = Date.valueOf(end_Date);
 
-                if(wagesRadioButton.isSelected()){
+           /*     if(wagesRadioButton.isSelected()){
                     try {
                         setTableInScrollPane(new JTable
                                 (ViewUtils.buildResultsTableModel(sqlGenerateReports.viewWagesReport(storeId, startDate, endDate))));
@@ -107,6 +107,7 @@ public class GenerateReports {
                         ex.printStackTrace();
                     }
                 }
+                */
 
             }
         });
