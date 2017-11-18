@@ -21,7 +21,6 @@ public class SQLGenerateReports {
                 ps.setInt(3, storeId);
                 ps.setInt(4, 0);
                 ps.setInt(5, rs.getInt(3));
-                int a = rs.getInt(3);
                 ps.setInt(6, 0);
                 ps.executeUpdate();
                 ordersAdded++;
@@ -55,8 +54,10 @@ public class SQLGenerateReports {
                                             "O.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
                                             "O.ORDER_NUMBER = OI.ORDER_NUMBER AND " +
                                             "I.SKU = OI.SKU AND " +
+                                            "TIME_DATE_PLACED >= ? AND " +
                                             "O.TIME_DATE_RECEIVED IS NOT NULL " +
                                             "GROUP BY O.TIME_DATE_PLACED , O.TIME_DATE_RECEIVED");
+            ps.setDate(1, startDate);
             rs = ps.executeQuery();
             addReport(rs, storeId, startDate, endDate);
             ps.close();
@@ -68,6 +69,7 @@ public class SQLGenerateReports {
     }
 
     public void generareSalesReport(int storeId, Date startDate, Date endDate){
+
 
     }
 
