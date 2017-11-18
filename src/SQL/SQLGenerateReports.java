@@ -20,7 +20,7 @@ public class SQLGenerateReports {
                 ps.setDate(2, endDate);
                 ps.setInt(3, storeId);
                 ps.setInt(4, 0);
-                ps.setInt(5, rs.getInt(3));
+                ps.setInt(5, rs.getInt(2));
                 ps.setInt(6, 0);
                 ps.executeUpdate();
                 ordersAdded++;
@@ -46,18 +46,18 @@ public class SQLGenerateReports {
         PreparedStatement ps;
         ResultSet rs;
         try{
-            ps = con.prepareStatement("SELECT O.TIME_DATE_PLACED as \"Start date\", " +
-                                            "O.TIME_DATE_RECEIVED as \"End date\", " +
+            ps = con.prepareStatement("SELECT E.STORE_ID, " +
                                             "SUM(OI.QUANTITY * I.PRICE) AS \"ORDER TOTAL\" " +   // TODO revisit price calculation
                                             "FROM ORDERITEMS OI, ORDERS O, EMPLOYEES E, ITEMS I " +
-                                            "WHERE E.STORE_ID = 1 AND " +
+                                            "WHERE E.STORE_ID = ? AND " +
                                             "O.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
                                             "O.ORDER_NUMBER = OI.ORDER_NUMBER AND " +
                                             "I.SKU = OI.SKU AND " +
                                             "TIME_DATE_PLACED >= ? AND " +
                                             "O.TIME_DATE_RECEIVED IS NOT NULL " +
-                                            "GROUP BY O.TIME_DATE_PLACED , O.TIME_DATE_RECEIVED");
-            ps.setDate(1, startDate);
+                                            "GROUP BY E.STORE_ID");
+            ps.setInt(1, storeId);
+            ps.setDate(2, startDate);
             rs = ps.executeQuery();
             addReport(rs, storeId, startDate, endDate);
             ps.close();
@@ -69,6 +69,7 @@ public class SQLGenerateReports {
     }
 
     public void generareSalesReport(int storeId, Date startDate, Date endDate){
+
 
 
     }
