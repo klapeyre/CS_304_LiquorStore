@@ -15,7 +15,6 @@ public class StockManagement {
     private JTextField priceTextFieldTextField;
     private JTextField descriptionTextField;
     private JButton addNewItemButton;
-    private JTextField storeIDTextField;
     private JTextField alcoholPercentageTextField;
     private JTextField packQuantityTextField;
     private JTextField typeTextField;
@@ -26,7 +25,6 @@ public class StockManagement {
     private JRadioButton wineRadioButton;
     private JTextField removeItemTextField;
     private JButton removeItemButton;
-    private JTextField quantityTextField;
     private JTextField updateItemTextField;
     private JTextField newDescriptionTextField;
     private JButton updateDescriptionButton;
@@ -87,10 +85,15 @@ public class StockManagement {
                     }
                     JOptionPane.showMessageDialog(null, "New beer sku "+sku+" was added!");
                 } else if (wineRadioButton.isSelected()){
+                    Integer sku;
                     String subtype = subtypeTextField.getText();
-                    //sqlStockManagement.insertWine(name, tax, deposit, price, description, storeID, percentage, type, region, company, subtype); //Don't forget to insert into Item table too
-                    //TODO check if everything was fine then
-                    JOptionPane.showMessageDialog(null, "New wine was added!");
+                    try {
+                        sku = sqlStockManagement.insertWine(name, tax, deposit, price, description, percentage, type, region, company, volume, subtype);
+                    } catch (SQLException e1) {
+                        JOptionPane.showMessageDialog(null, "Wine could not be added. Message: "+e1.getMessage());
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(null, "New wine sku "+sku+" was added!");
                 } else {
                     Integer sku;
                     try {
