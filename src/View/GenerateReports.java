@@ -68,9 +68,8 @@ public class GenerateReports {
                     sqlGenerateReports.generateOrdersReport(storeId, startDate, endDate);
                 }
                 else if(salesRadioButton.isSelected()){
-                    sqlGenerateReports.generareSalesReport(storeId, startDate, endDate);
+                    sqlGenerateReports.generateSalesReport(storeId, startDate, endDate);
                 }
-
             }
         });
 
