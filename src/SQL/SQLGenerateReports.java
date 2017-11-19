@@ -1,5 +1,7 @@
 package SQL;
 
+import View.ViewUtils;
+
 import javax.swing.*;
 import java.sql.*;
 
@@ -115,23 +117,78 @@ public class SQLGenerateReports {
         }
     }
 
-  /*  public ResultSet viewWagesReport(int storeId, Date startDate, Date endDate){
-        ResultSet result;
-
-        return result;
+    public JTable viewWagesReport(int storeId, Date startDate, Date endDate){
+        PreparedStatement ps;
+        ResultSet rs;
+        JTable resultsTable = null;
+        try{
+            ps = con.prepareStatement("SELECT REPORT_ID AS \"REPORT ID\", " +
+                                            "STORE_ID AS \"STORE ID\", "+
+                                            "ST_DATE AS \"START DATE\", " +
+                                            "END_DATE AS \"END DATE\", " +
+                                            "TOTAL_WAGES AS \"TOTAL WAGES\" " +
+                                            "FROM REPORTS " +
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_WAGES != 0");
+            ps.setInt(1, storeId);
+            ps.setDate(2, startDate);
+            ps.setDate(3, endDate);
+            rs = ps.executeQuery();
+            resultsTable = new JTable(ViewUtils.buildResultsTableModel(rs));
+            ps.close();
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Failed obtain wage reports data\n " +
+                                                                         "please check store id, start and end dates");
+        }
+        return resultsTable;
     }
 
-    public ResultSet viewOrdersReport(int storeId, Date startDate, Date endDate){
-        ResultSet result;
-
-        return result;
+    public JTable viewOrdersReport(int storeId, Date startDate, Date endDate){
+        PreparedStatement ps;
+        ResultSet rs;
+        JTable resultsTable = null;
+        try{
+            ps = con.prepareStatement("SELECT REPORT_ID AS \"REPORT ID\", " +
+                                            "STORE_ID AS \"STORE ID\", "+
+                                            "ST_DATE AS \"START DATE\", " +
+                                            "END_DATE AS \"END DATE\", " +
+                                            "TOTAL_ORDERS AS \"TOTAL ORDERS\" " +
+                                            "FROM REPORTS " +
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_ORDERS != 0");
+            ps.setInt(1, storeId);
+            ps.setDate(2, startDate);
+            ps.setDate(3, endDate);
+            rs = ps.executeQuery();
+            resultsTable = new JTable(ViewUtils.buildResultsTableModel(rs));
+            ps.close();
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Failed obtain order reports data\n" +
+                                                                         "please check store id, start and end dates");
+        }
+        return resultsTable;
     }
 
-    public ResultSet viewSalesReport(int storeId, Date startDate, Date endDate){
-        ResultSet result;
-
-        return result;
+    public JTable viewSalesReport(int storeId, Date startDate, Date endDate) {
+        PreparedStatement ps;
+        ResultSet rs;
+        JTable resultsTable = null;
+        try {
+            ps = con.prepareStatement("SELECT REPORT_ID AS \"REPORT ID\", " +
+                                            "STORE_ID AS \"STORE ID\", " +
+                                            "ST_DATE AS \"START DATE\", " +
+                                            "END_DATE AS \"END DATE\", " +
+                                            "TOTAL_SALES AS \"TOTAL ORDERS\" " +
+                                            "FROM REPORTS " +
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_SALES != 0");
+            ps.setInt(1, storeId);
+            ps.setDate(2, startDate);
+            ps.setDate(3, endDate);
+            rs = ps.executeQuery();
+            resultsTable = new JTable(ViewUtils.buildResultsTableModel(rs));
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Failed obtain sale reports data\n" +
+                                                                         "please check store id, start and end dates");
+        }
+        return resultsTable;
     }
-    */
-
 }

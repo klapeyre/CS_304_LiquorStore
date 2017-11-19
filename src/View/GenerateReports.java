@@ -82,32 +82,15 @@ public class GenerateReports {
                 Date startDate = Date.valueOf(start_Date);
                 Date endDate = Date.valueOf(end_Date);
 
-           /*     if(wagesRadioButton.isSelected()){
-                    try {
-                        setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(sqlGenerateReports.viewWagesReport(storeId, startDate, endDate))));
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+                if(wagesRadioButton.isSelected()){
+                    setTableInScrollPane(sqlGenerateReports.viewWagesReport(storeId, startDate, endDate));
                 }
                 else if(ordersRadioButton.isSelected()){
-                    try {
-                        setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(sqlGenerateReports.viewOrdersReport(storeId, startDate, endDate))));
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+                        setTableInScrollPane(sqlGenerateReports.viewOrdersReport(storeId, startDate, endDate));
                 }
                 else if(salesRadioButton.isSelected()){
-                    try {
-                        setTableInScrollPane(new JTable
-                                (ViewUtils.buildResultsTableModel(sqlGenerateReports.viewSalesReport(storeId, startDate, endDate))));
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+                    setTableInScrollPane(sqlGenerateReports.viewSalesReport(storeId, startDate, endDate));
                 }
-                */
-
             }
         });
     }
