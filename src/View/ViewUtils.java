@@ -4,6 +4,7 @@ import oracle.sql.TIMESTAMP;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.*;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -80,4 +81,19 @@ public final class ViewUtils {
             throw e;
         }
     }
+
+    public static int parseUserInput(JTextField inputField, JLabel errorLabel, String id) {
+        int value = 0;
+        try {
+            value = Integer.parseInt(inputField.getText());
+            errorLabel.setVisible(false);
+        } catch (NumberFormatException ne) {
+            errorLabel.setVisible(true);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setText("Invalid input value for: " + id);
+            value = -1;
+        }
+        return value;
+    }
+
 }
