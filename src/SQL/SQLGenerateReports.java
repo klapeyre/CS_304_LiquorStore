@@ -176,7 +176,7 @@ public class SQLGenerateReports {
                                             "STORE_ID AS \"STORE ID\", " +
                                             "ST_DATE AS \"START DATE\", " +
                                             "END_DATE AS \"END DATE\", " +
-                                            "TOTAL_SALES AS \"TOTAL ORDERS\" " +
+                                            "TOTAL_SALES AS \"TOTAL SALES\" " +
                                             "FROM REPORTS " +
                                             "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_SALES != 0");
             ps.setInt(1, storeId);
