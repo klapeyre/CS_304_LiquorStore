@@ -6,6 +6,8 @@ import java.util.Vector;
 public class SQLSearchStock {
     private static final String ALL_SUBTYPES = "All Types";
     private static final String ALL_STORES = "All Stores";
+    private static final String ALL_REDS = "All Red Wines";
+    private static final String ALL_WHITES = "All White Wines";
     private final Connection con;
 
     public SQLSearchStock() {
@@ -16,12 +18,12 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax + i.deposit as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price + i.price * i.tax + i.deposit as price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.sku = ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND i.sku = ? AND s.name LIKE ? ");
         }
@@ -34,12 +36,12 @@ public class SQLSearchStock {
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price + i.price * i.tax + i.deposit as price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price + i.price * i.tax + i.deposit as price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
-                    "SELECT i.sku, s.name as storeName, i.name, i.price, i.description, si.stock_quantity "
+                    "SELECT i.sku, s.name as storeName, i.name, i.description, i.price, si.stock_quantity "
                             + "FROM ITEMS i, STORES s, STOREITEMS si "
                             + "WHERE i.sku = si.sku AND s.store_id = si.store_id AND UPPER(i.name) LIKE ? AND s.name LIKE ? ");
         }
@@ -49,27 +51,67 @@ public class SQLSearchStock {
         return ps.executeQuery();
     }
 
-    public ResultSet selectByType(String subType, String type, String storeName, boolean tax) throws SQLException{
+    public ResultSet selectByBeer(String type, String storeName, boolean tax) throws SQLException{
         PreparedStatement ps;
         if (tax) {
             ps = con.prepareStatement(
-                    "SELECT t.sku, s.name as storeName, t.company, i.name, t.type, " +
-                            "i.price + i.price * i.tax + i.deposit as price,si.stock_quantity "
-                            + "FROM ITEMS i, STORES s, STOREITEMS si, " + type + " t "
-                            + "WHERE t.sku = si.sku AND i.sku = t.sku AND s.store_id = si.store_id AND " +
-                            "t.type LIKE ? AND s.name LIKE ? ");
+                    "SELECT b.sku, s.name as storeName, b.company, i.name, b.type, " +
+                            "ROUND(i.price + i.price * i.tax + i.deposit, 2) as price ,si.stock_quantity "
+                            + "FROM ITEMS i, STORES s, STOREITEMS si, BEERS b "
+                            + "WHERE b.sku = si.sku AND i.sku = b.sku AND s.store_id = si.store_id AND " +
+                            "b.type LIKE ? AND s.name LIKE ? ");
         } else {
             ps = con.prepareStatement(
-                    "SELECT t.sku, s.name as storeName, t.company, i.name, t.type, i.price, si.stock_quantity "
-                            + "FROM ITEMS i, STORES s, STOREITEMS si, " + type + " t "
-                            + "WHERE t.sku = si.sku AND i.sku = t.sku AND s.store_id = si.store_id AND " +
-                            "t.type LIKE ? AND s.name LIKE ? ");
+                    "SELECT b.sku, s.name as storeName, b.company, i.name, b.type, i.price, si.stock_quantity "
+                            + "FROM ITEMS i, STORES s, STOREITEMS si, BEERS b "
+                            + "WHERE b.sku = si.sku AND i.sku = b.sku AND s.store_id = si.store_id AND " +
+                            "b.type LIKE ? AND s.name LIKE ? ");
         }
 
-        setSubTypeVariable(ps, subType);
+        setTypeVariable(ps, type);
         setStoreVariable(ps, storeName);
         return ps.executeQuery();
     }
+
+    public ResultSet selectByWine(String type, String storeName, boolean tax) throws SQLException {
+        PreparedStatement ps;
+        if (type.equals(ALL_REDS) || type.equals(ALL_WHITES)) {
+            if (tax) {
+                ps = con.prepareStatement(
+                        "SELECT w.sku, s.name as storeName, w.company, i.name, w.type, w.subtype, " +
+                                "ROUND(i.price + i.price * i.tax + i.deposit, 2) as price, si.stock_quantity "
+                                + "FROM ITEMS i, STORES s, STOREITEMS si, WINES w "
+                                + "WHERE w.sku = si.sku AND i.sku = w.sku AND s.store_id = si.store_id AND " +
+                                "w.type LIKE ? AND s.name LIKE ? ");
+            } else {
+                ps = con.prepareStatement(
+                        "SELECT w.sku, s.name as storeName, w.company, i.name, w.type, w.subtype, i.price, si.stock_quantity "
+                                + "FROM ITEMS i, STORES s, STOREITEMS si, WINES w "
+                                + "WHERE w.sku = si.sku AND i.sku = w.sku AND s.store_id = si.store_id AND " +
+                                "w.type LIKE ? AND s.name LIKE ? ");
+            }
+        } else {
+            if (tax) {
+                ps = con.prepareStatement(
+                        "SELECT w.sku, s.name as storeName, w.company, i.name, w.type, w.subtype, " +
+                                "ROUND(i.price + i.price * i.tax + i.deposit, 2) as price, si.stock_quantity "
+                                + "FROM ITEMS i, STORES s, STOREITEMS si, WINES w "
+                                + "WHERE w.sku = si.sku AND i.sku = w.sku AND s.store_id = si.store_id AND " +
+                                "w.subtype LIKE ? AND s.name LIKE ? ");
+            } else {
+                ps = con.prepareStatement(
+                        "SELECT w.sku, s.name as storeName, w.company, i.name, w.type, w.subtype, i.price, si.stock_quantity "
+                                + "FROM ITEMS i, STORES s, STOREITEMS si, WINES w "
+                                + "WHERE w.sku = si.sku AND i.sku = w.sku AND s.store_id = si.store_id AND " +
+                                "w.subtype LIKE ? AND s.name LIKE ? ");
+            }
+        }
+
+        setTypeVariable(ps, type);
+        setStoreVariable(ps, storeName);
+        return ps.executeQuery();
+    }
+
 
     public Vector<String> getStoreNames() throws SQLException {
         Vector<String> storeNames = new Vector<String>();
@@ -84,10 +126,19 @@ public class SQLSearchStock {
         return storeNames;
     }
 
-    public Vector<String> getSubTypeNames(String type) throws SQLException {
+    public Vector<String> getTypeNames(String type) throws SQLException {
+        PreparedStatement ps;
         Vector<String> subTypeNames = new Vector<>();
         subTypeNames.add(ALL_SUBTYPES);
-        PreparedStatement ps = con.prepareStatement("SELECT DISTINCT type " + "FROM " + type);
+
+        if (type.equals("Beers")) {
+            ps = con.prepareStatement("SELECT DISTINCT type " + "FROM " + type);
+        } else {
+            subTypeNames.add(ALL_REDS);
+            subTypeNames.add(ALL_WHITES);
+            ps = con.prepareStatement("SELECT DISTINCT subtype " + "FROM " + type);
+        }
+
 
         ResultSet results = ps.executeQuery();
         while (results.next()) {
@@ -97,11 +148,15 @@ public class SQLSearchStock {
         return subTypeNames;
     }
 
-    public void setSubTypeVariable(PreparedStatement ps, String subType) throws SQLException {
-        if (subType.equals(ALL_SUBTYPES)) {
+    public void setTypeVariable(PreparedStatement ps, String type) throws SQLException {
+        if (type.equals(ALL_SUBTYPES)) {
             ps.setString(1, "%");
+        } else if (type.equals(ALL_REDS)) {
+            ps.setString(1, "Red");
+        } else if (type.equals(ALL_WHITES)) {
+            ps.setString(1, "White");
         } else {
-            ps.setString(1, subType);
+            ps.setString(1,type);
         }
     }
 
