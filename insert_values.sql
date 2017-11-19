@@ -101,6 +101,10 @@ commit;
 
 insert into employees values (1,'John Manage','jmanage','password1',100.00,1,'Manager');
 insert into employees values (3,'Michael C','mc','password3',70.00,1,'Clerk');
+insert into employees values (2,'Jane Doe','jd','password2',70.00,1,'Clerk');
+insert into employees values (4,'Tiffany Sales','tsales','password4',100.00,2,'Manager');
+insert into employees values (5,'Butch Cassidy','bc','password5',70.00,2,'Clerk');
+insert into employees values (6,'Sundance Kid','sk','password6',70.00,2,'Clerk');
 
 commit;
 

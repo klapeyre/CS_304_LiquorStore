@@ -19,7 +19,7 @@ commit;
 
 create table items (
     sku int not null,
-    name varchar(30),
+    name varchar(30) not null,
     tax double precision,
     deposit double precision,
     price double precision,
@@ -87,8 +87,8 @@ grant select on employees to public;
 
 commit;
 
-create view clerk_view(name, store_id) as
-select name, store_id
+create view clerk_view(employee_id, name, store_id) as
+select employee_id, name, store_id
 from employees;
 
 grant select on clerk_view to public;
