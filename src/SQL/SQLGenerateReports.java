@@ -14,8 +14,10 @@ public class SQLGenerateReports {
 
     private void addReport(ResultSet rs, int storeId, Date startDate, Date endDate, String type){
         PreparedStatement ps;
+        boolean emptyReport = true;
         try{
             while(rs.next()){
+                emptyReport = false;
                 ps = con.prepareStatement("INSERT INTO REPORTS VALUES (SEQ_ID.NEXTVAL, ?, ?, ?, ?, ?, ?)");
                 ps.setDate(1, startDate);
                 ps.setDate(2, endDate);
@@ -33,6 +35,17 @@ public class SQLGenerateReports {
                     ps.setDouble(5, 0);
                     ps.setDouble(6, rs.getDouble(2));
                 }
+                ps.executeUpdate();
+            }
+
+            if (emptyReport){
+                ps = con.prepareStatement("INSERT INTO REPORTS VALUES (SEQ_ID.NEXTVAL, ?, ?, ?, ?, ?, ?)");
+                ps.setDate(1, startDate);
+                ps.setDate(2, endDate);
+                ps.setInt(3, storeId);
+                ps.setDouble(4, 0);
+                ps.setDouble(5, 0);
+                ps.setDouble(6, 0);
                 ps.executeUpdate();
             }
         } catch (SQLException e){
