@@ -62,7 +62,7 @@ public class SQLGenerateReports {
             addReport(rs, storeId, startDate, endDate, "wages report");
             ps.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Failed to obtain list of salaries to include in report");
+            JOptionPane.showMessageDialog(null, "Failed to obtain list of salaries to include in the report");
             e.printStackTrace();
             return;
         }
@@ -88,7 +88,7 @@ public class SQLGenerateReports {
             addReport(rs, storeId, startDate, endDate, "orders report");
             ps.close();
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "Failed to obtain list of orders to include in report");
+            JOptionPane.showMessageDialog(null, "Failed to obtain list of orders to include in the report");
             e.printStackTrace();
             return;
         }
@@ -111,7 +111,7 @@ public class SQLGenerateReports {
             addReport(rs, storeId, startDate, endDate, "sales report");
             ps.close();
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "Failed to obtain list of sales to include in report");
+            JOptionPane.showMessageDialog(null, "Failed to obtain list of sales to include in the report");
             e.printStackTrace();
             return;
         }
