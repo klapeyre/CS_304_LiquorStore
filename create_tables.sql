@@ -102,7 +102,7 @@ create table orders (
     time_date_received TIMESTAMP,
     employee_id int not null,
     primary key (order_number),
-    foreign key (employee_id) references employees);
+    foreign key (employee_id) references employees on delete set null);
 
 grant select on orders to public;
 
@@ -127,7 +127,7 @@ create table store_sales (
     sale_date timestamp,
     employee_id int not null,
     primary key (sale_number),
-    foreign key (employee_id) references employees);
+    foreign key (employee_id) references employees on delete set null);
 
 grant select on store_sales to public;
 
