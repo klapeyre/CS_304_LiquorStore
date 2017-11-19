@@ -11,7 +11,38 @@ public class SQLStockManagement {
         con = DatabaseConnection.getConnection();
     }
 
-    public Integer insertItem(String name, Double tax, Double deposit,
+    public Integer insertItem(Integer storeID, String name, Double tax, Double deposit,
+                              Double price, String description) throws SQLException{
+
+        Integer sku = insertItemIntoItemTable(name, tax, deposit, price, description);
+
+        PreparedStatement ps;
+
+        try {
+            ps = con.prepareStatement("INSERT INTO storeitems VALUES (?,?,0)");
+            ps.setInt(1, sku);
+            ps.setInt(2, storeID);
+
+            ps.executeUpdate();
+            con.commit();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Inserting item into storeitems failed. Message: "+e.getMessage());
+            try
+            {
+                // undo the insert
+                con.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Message: " + e2.getMessage());
+                System.exit(-1);
+            }
+            throw e;
+        }
+
+        return sku;
+    }
+
+    public Integer insertItemIntoItemTable(String name, Double tax, Double deposit,
                             Double price, String description) throws SQLException {
 
         PreparedStatement ps;
@@ -51,13 +82,14 @@ public class SQLStockManagement {
             }
             throw e;
         }
+
         return ViewUtils.getSequenceNumber(con);
     }
 
-    public int insertBeer(String name, Double tax, Double deposit, Double price, String description, Double percentage,
+    public int insertBeer(Integer storeID, String name, Double tax, Double deposit, Double price, String description, Double percentage,
                           String type, String region, String company, Integer volume, Integer packQuantity) throws SQLException {
 
-        Integer sku = insertItem(name, tax, deposit, price, description);
+        Integer sku = insertItem(storeID, name, tax, deposit, price, description);
 
         PreparedStatement ps;
 
@@ -102,10 +134,10 @@ public class SQLStockManagement {
     }
 
 
-    public int insertWine(String name, Double tax, Double deposit, Double price, String description, Double percentage,
+    public int insertWine(Integer storeID, String name, Double tax, Double deposit, Double price, String description, Double percentage,
                           String type, String region, String company, Integer volume, String subtype) throws SQLException {
 
-        Integer sku = insertItem(name, tax, deposit, price, description);
+        Integer sku = insertItem(storeID, name, tax, deposit, price, description);
 
         PreparedStatement ps;
 

@@ -34,6 +34,8 @@ public class StockManagement {
     private JTextField storeIdUpdateTextField;
     private JLabel itemSKUErrorLabel;
     private JTextField volumeTextField;
+    private JTextField storeIdTextField;
+    private JRadioButton nonAlcoholicRadioButton;
     private SQLStockManagement sqlStockManagement;
 
     public StockManagement() {
@@ -46,7 +48,7 @@ public class StockManagement {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeErrorLabels();
-                String name = nameTextField.getText();
+                String name = "";
                 String description = descriptionTextField.getText();
                 String type = typeTextField.getText();
                 String region = regionTextField.getText();
@@ -57,6 +59,12 @@ public class StockManagement {
                 Double percentage;
                 Integer packQuantity;
                 Integer volume;
+                Integer storeID = null;
+
+                if (nameTextField.getText().equals("") || storeIdTextField.getText().equals("")){
+                    numberErrorLabel.setVisible(true);
+                    return;
+                }
 
                 try {
                     tax = getTextFieldForDouble(taxTextField);
@@ -65,6 +73,8 @@ public class StockManagement {
                     percentage = getTextFieldForDouble(alcoholPercentageTextField);
                     packQuantity = null;
                     volume = null;
+                    if (getTextFieldForDouble(storeIdTextField) != null)
+                        storeID = getTextFieldForDouble(storeIdTextField).intValue();
                     if (getTextFieldForDouble(volumeTextField) != null)
                         volume = getTextFieldForDouble(volumeTextField).intValue();
                     if (getTextFieldForDouble(packQuantityTextField) != null)
@@ -78,7 +88,7 @@ public class StockManagement {
                 if (beerRadioButton.isSelected()){
                     Integer sku;
                     try {
-                        sku = sqlStockManagement.insertBeer(name, tax, deposit, price, description, percentage, type, region, company, volume, packQuantity);
+                        sku = sqlStockManagement.insertBeer(storeID, name, tax, deposit, price, description, percentage, type, region, company, volume, packQuantity);
                     } catch (SQLException e1) {
                         JOptionPane.showMessageDialog(null, "Beer could not be added. Message: "+e1.getMessage());
                         return;
@@ -88,7 +98,7 @@ public class StockManagement {
                     Integer sku;
                     String subtype = subtypeTextField.getText();
                     try {
-                        sku = sqlStockManagement.insertWine(name, tax, deposit, price, description, percentage, type, region, company, volume, subtype);
+                        sku = sqlStockManagement.insertWine(storeID, name, tax, deposit, price, description, percentage, type, region, company, volume, subtype);
                     } catch (SQLException e1) {
                         JOptionPane.showMessageDialog(null, "Wine could not be added. Message: "+e1.getMessage());
                         return;
@@ -97,7 +107,7 @@ public class StockManagement {
                 } else {
                     Integer sku;
                     try {
-                        sku = sqlStockManagement.insertItem(name, tax, deposit, price, description);
+                        sku = sqlStockManagement.insertItem(storeID, name, tax, deposit, price, description);
                     } catch (SQLException e1) {
                         JOptionPane.showMessageDialog(null, "Item could not be added. Message: "+e1.getMessage());
                         return;
