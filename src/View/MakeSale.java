@@ -18,7 +18,6 @@ public class MakeSale {
     private JTable saleItemTable;
     private JPanel panelMS;
     private JTextField employeeIDTextField;
-    private JTextField storeIdTextField;
     private JLabel empStoreErrorLabel;
     private JRadioButton creditRadioButton;
     private JRadioButton debitRadioButton;
@@ -80,13 +79,22 @@ public class MakeSale {
             public void actionPerformed(ActionEvent e) {
                 clearErrors();
                 Integer employeeID;
-                Integer storeID;
                 String paymentType=null;
                 try {
                     employeeID = Integer.parseInt(employeeIDTextField.getText());
-                    storeID = Integer.parseInt(storeIdTextField.getText());
                 } catch (NumberFormatException nfe){
                     empStoreErrorLabel.setVisible(true);
+                    return;
+                }
+
+                Integer storeID;
+                try {
+                    storeID = sqlMakeSale.getEmployeeStoreID(employeeID);
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(null, "Could not get store id of employee. "+e1.getMessage());
+                    return;
+                } catch (UnsupportedOperationException uop) {
+                    JOptionPane.showMessageDialog(null, "Employee "+employeeID+" does not exist.");
                     return;
                 }
 

@@ -31,6 +31,31 @@ public class SQLMakeSale {
         return count > 0;
     }
 
+    public Integer getEmployeeStoreID(Integer employeeID) throws SQLException {
+        PreparedStatement  ps;
+        ResultSet  rs;
+        Integer storeID = -1;
+
+        try {
+            ps = con.prepareStatement("SELECT store_id FROM employees WHERE employee_id = ?");
+            ps.setInt(1,employeeID);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                storeID = rs.getInt("store_id");
+            }
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Could not determine store id of employee. Message: "+e.getMessage());
+            throw e;
+        }
+
+        if (storeID == -1){
+            throw new UnsupportedOperationException();
+        }
+
+        return storeID;
+    }
+
     public int itemQuantityAtStore(Integer sku, Integer storeID){
         PreparedStatement  ps;
         ResultSet  rs;
