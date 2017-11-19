@@ -141,7 +141,7 @@ public class SQLGenerateReports {
                                             "END_DATE AS \"END DATE\", " +
                                             "TOTAL_WAGES AS \"TOTAL WAGES\" " +
                                             "FROM REPORTS " +
-                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_WAGES != 0");
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ?");
             ps.setInt(1, storeId);
             ps.setDate(2, startDate);
             ps.setDate(3, endDate);
@@ -166,7 +166,7 @@ public class SQLGenerateReports {
                                             "END_DATE AS \"END DATE\", " +
                                             "TOTAL_ORDERS AS \"TOTAL ORDERS\" " +
                                             "FROM REPORTS " +
-                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_ORDERS != 0");
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ?");
             ps.setInt(1, storeId);
             ps.setDate(2, startDate);
             ps.setDate(3, endDate);
@@ -191,7 +191,7 @@ public class SQLGenerateReports {
                                             "END_DATE AS \"END DATE\", " +
                                             "TOTAL_SALES AS \"TOTAL SALES\" " +
                                             "FROM REPORTS " +
-                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ? AND TOTAL_SALES != 0");
+                                            "WHERE STORE_ID = ? AND ST_DATE >= ? AND END_DATE <= ?");
             ps.setInt(1, storeId);
             ps.setDate(2, startDate);
             ps.setDate(3, endDate);
