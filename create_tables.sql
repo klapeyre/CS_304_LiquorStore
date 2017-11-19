@@ -19,7 +19,7 @@ commit;
 
 create table items (
     sku int not null,
-    name varchar(30),
+    name varchar(30) not null,
     tax double precision,
     deposit double precision,
     price double precision,
