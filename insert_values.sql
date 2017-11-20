@@ -108,11 +108,25 @@ insert into employees values (6,'Sundance Kid','sk','password6',70.00,2,'Clerk')
 
 commit;
 
--- orders and sales should have timestamps. Then the report can choose a DATE range, and any timestamps that fall in that range would 
--- be collected
-
 insert into orders values (100,'Granville Island','2017-10-30 10:00','2017-10-31 11:00',1);
 insert into orders values (101,'Superflux','2017-11-08 10:00',null,1);
+insert into orders values (102,'Mission Hill Vineyards','2017-11-01 12:00','2017-11-05 10:00',1);
+insert into orders values (103,'Jackson Triggs','2017-11-01 12:00','2017-11-05 10:00',1);
+insert into orders values (104,'Kokanee','2017-11-01 10:00','2017-11-02 10:00',1);
+insert into orders values (105,'Driftwood','2017-11-08 10:00','2017-11-10 12:00',1);
+insert into orders values (106,'Naked Grape','2017-11-08 10:00','2017-11-10 12:00',1);
+insert into orders values (107,'Granville Island','2017-11-12 10:00','2017-11-14 12:00',1);
+insert into orders values (108,'Screw It','2017-11-15 10:00','2017-11-20 10:00',1);
+insert into orders values (109,'Johnny Q','2017-11-08 10:00',null,1);
+insert into orders values (110,'Superflux','2017-11-09 10:00','2017-11-11 10:00',2);
+insert into orders values (111,'Granville Island','2017-11-02 10:00',null,2);
+insert into orders values (112,'Mission Hill Vineyards','2017-11-01 12:00','2017-11-05 10:00',2);
+insert into orders values (113,'Jackson Triggs','2017-11-01 12:00','2017-11-05 10:00',2);
+insert into orders values (114,'Naked Grape','2017-11-08 10:00','2017-11-10 12:00',2);
+insert into orders values (115,'Screw It','2017-11-15 10:00','2017-11-20 10:00',2);
+insert into orders values (116,'Superflux','2017-11-08 10:00',null,2);
+
+                           
 
 commit;
 
@@ -121,6 +135,38 @@ insert into orderitems values (1003,100,4);
 insert into orderitems values (1004,100,4);
 insert into orderitems values (1006,101,24);
 insert into orderitems values (1007,101,24);
+insert into orderitems values (1010,102,12);
+insert into orderitems values (1019,103,12);
+insert into orderitems values (1020,103,12);
+insert into orderitems values (1001,104,10);
+insert into orderitems values (1008,105,12);
+insert into orderitems values (1009,105,12);
+insert into orderitems values (1011,106,12);
+insert into orderitems values (1012,106,12);
+insert into orderitems values (1013,106,12);
+insert into orderitems values (1002,107,4);
+insert into orderitems values (1003,107,4);
+insert into orderitems values (1004,107,4);
+insert into orderitems values (1014,108,12);
+insert into orderitems values (1015,108,12);
+insert into orderitems values (1016,108,6);
+insert into orderitems values (1017,108,12);
+insert into orderitems values (1018,109,12);
+insert into orderitems values (1006,110,24);
+insert into orderitems values (1007,110,24);
+insert into orderitems values (1002,111,8);
+insert into orderitems values (1003,111,8);
+insert into orderitems values (1004,111,8);
+insert into orderitems values (1010,112,12);
+insert into orderitems values (1019,113,12);
+insert into orderitems values (1011,114,12);
+insert into orderitems values (1012,114,24);
+insert into orderitems values (1013,114,12);
+insert into orderitems values (1014,115,12);
+insert into orderitems values (1015,115,12);
+insert into orderitems values (1006,116,24);
+insert into orderitems values (1007,116,24);
+
 
 commit;
 
