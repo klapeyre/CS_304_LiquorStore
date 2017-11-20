@@ -97,6 +97,9 @@ public class EmployeeManagement {
                 } catch (UnsupportedOperationException e1){
                     JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" does not exist");
                     return;
+                } catch (SQLException e1){
+                    JOptionPane.showMessageDialog(null, "Employee could not be removed. Message:"+e1.getMessage());
+                    return;
                 }
                 JOptionPane.showMessageDialog(null, "Employee with ID "+employeeID+" was removed!");
                 clearTextFields();

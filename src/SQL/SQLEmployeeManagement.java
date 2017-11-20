@@ -46,7 +46,7 @@ public class SQLEmployeeManagement {
         return ViewUtils.getSequenceNumber(con);
     }
 
-    public void removeEmployee(int employeeID){
+    public void removeEmployee(int employeeID) throws SQLException {
         PreparedStatement ps;
 
         try {
@@ -61,7 +61,6 @@ public class SQLEmployeeManagement {
             ps.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             try
             {
                 con.rollback();
@@ -70,6 +69,7 @@ public class SQLEmployeeManagement {
                 System.out.println("Message: " + e2.getMessage());
                 System.exit(-1);
             }
+            throw e;
         }
 
     }
