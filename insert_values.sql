@@ -174,6 +174,25 @@ insert into store_sales values (100,14.10,'Credit','2017-11-05 12:30',3);
 insert into store_sales values (101,26.03,'Debit','2017-11-05 12:35',3);
 insert into store_sales values (102,29.43,'Debit','2017-11-05 12:50',3);
 insert into store_sales values (103,16.05,'Cash','2017-11-05 13:00',3);
+insert into store_sales values (104,328.60,'Debit','2017-11-08 12:50',2);
+insert into store_sales values (105,784.80,'Credit','2017-10-31 17:00',2);
+insert into store_sales values (106,416.64,'Debit','2017-11-01 10:00',2);
+insert into store_sales values (107,2822.50,'Debit','2017-11-02 12:00',2);
+insert into store_sales values (108,3395.00,'Cash','2017-11-04 13:00',2);
+insert into store_sales values (109,3345.00,'Credit','2017-11-15 10:00',2);
+insert into store_sales values (110,14.10,'Credit','2017-11-05 12:30',5);
+insert into store_sales values (111,26.03,'Debit','2017-11-05 12:35',5);
+insert into store_sales values (112,29.43,'Debit','2017-11-05 12:50',5);
+insert into store_sales values (113,16.05,'Cash','2017-11-05 13:00',5);
+insert into store_sales values (114,328.60,'Debit','2017-11-08 12:50',6);
+insert into store_sales values (115,784.80,'Credit','2017-10-31 17:00',6);
+insert into store_sales values (116,416.64,'Debit','2017-11-01 10:00',6);
+insert into store_sales values (117,2822.50,'Debit','2017-11-02 12:00',6);
+insert into store_sales values (118,3395.00,'Cash','2017-11-04 13:00',6);
+insert into store_sales values (119,3345.00,'Credit','2017-11-15 10:00',6);
+
+
+
 
 commit;
 
@@ -183,6 +202,41 @@ insert into saleitems values (1017,102,2);
 insert into saleitems values (1006,103,1);
 insert into saleitems values (1007,103,1);
 insert into saleitems values (1023,103,1);
+insert into saleitems values (1000,104,10);
+insert into saleitems values (1001,104,10);
+insert into saleitems values (1006,104,5);
+insert into saleitems values (1007,104,5);
+insert into saleitems values (1018,105,30);
+insert into saleitems values (1008,106,24);
+insert into saleitems values (1009,106,24);
+insert into saleitems values (1016,107,100);
+insert into saleitems values (1002,108,50);
+insert into saleitems values (1003,108,50);
+insert into saleitems values (1004,108,50);
+insert into saleitems values (1005,108,50);
+insert into saleitems values (1019,109,100);
+insert into saleitems values (1020,109,100);
+insert into saleitems values (1000,110,1);
+insert into saleitems values (1008,111,3);
+insert into saleitems values (1017,112,2);
+insert into saleitems values (1006,113,1);
+insert into saleitems values (1007,113,1);
+insert into saleitems values (1023,113,1);
+insert into saleitems values (1000,114,10);
+insert into saleitems values (1001,114,10);
+insert into saleitems values (1006,114,5);
+insert into saleitems values (1007,114,5);
+insert into saleitems values (1018,115,30);
+insert into saleitems values (1008,116,24);
+insert into saleitems values (1009,116,24);
+insert into saleitems values (1016,117,100);
+insert into saleitems values (1002,118,50);
+insert into saleitems values (1003,118,50);
+insert into saleitems values (1004,118,50);
+insert into saleitems values (1005,118,50);
+insert into saleitems values (1019,119,100);
+insert into saleitems values (1020,119,100);
+
 
 commit;
 
