@@ -48,7 +48,7 @@ public class StockManagement {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeErrorLabels();
-                String name = "";
+                String name = nameTextField.getText();
                 String description = descriptionTextField.getText();
                 String type = typeTextField.getText();
                 String region = regionTextField.getText();
