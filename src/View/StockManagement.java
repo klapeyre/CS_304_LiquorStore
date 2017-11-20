@@ -139,6 +139,7 @@ public class StockManagement {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Item, and all rows referencing it, was removed!");
+                removeItemTextField.setText("");
             }
         });
 
