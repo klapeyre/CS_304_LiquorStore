@@ -103,10 +103,12 @@ public class SQLGenerateReports {
                     "FROM STORE_SALES S, EMPLOYEES E " +
                     "WHERE E.STORE_ID = ? AND " +
                     "S.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
-                    "S.SALE_DATE >= ? " +
+                    "S.SALE_DATE >= ? AND " +
+                    "S.SALE_DATE <= ? " +
                     "GROUP BY E.STORE_ID");
             ps.setInt(1, storeId);
             ps.setDate(2, startDate);
+            ps.setDate(3, endDate);
             sales = ps.executeQuery();
             addReport(wages, orders, sales, storeId, startDate, endDate);
             ps.close();
