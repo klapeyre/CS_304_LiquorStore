@@ -160,6 +160,9 @@ grant select on reports to public;
 
 commit;
 
+alter table reports add constraint reports_constraint unique (st_date, end_date, store_id);
+
+commit;
 
 
 
