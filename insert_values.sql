@@ -110,7 +110,7 @@ commit;
 
 insert into orders values (100,'Granville Island','2017-10-30 10:00','2017-10-31 11:00',1);
 insert into orders values (101,'Superflux','2017-11-08 10:00',null,1);
-insert into orders values (102,'Mission Hill Vineyards','2017-11-01 12:00','2017-11-05 10:00',1);
+insert into orders values (102,'Mission Hill','2017-11-01 12:00','2017-11-05 10:00',1);
 insert into orders values (103,'Jackson Triggs','2017-11-01 12:00','2017-11-05 10:00',1);
 insert into orders values (104,'Kokanee','2017-11-01 10:00','2017-11-02 10:00',1);
 insert into orders values (105,'Driftwood','2017-11-08 10:00','2017-11-10 12:00',1);
@@ -120,7 +120,7 @@ insert into orders values (108,'Screw It','2017-11-15 10:00','2017-11-20 10:00',
 insert into orders values (109,'Johnny Q','2017-11-08 10:00',null,1);
 insert into orders values (110,'Superflux','2017-11-09 10:00','2017-11-11 10:00',4);
 insert into orders values (111,'Granville Island','2017-11-02 10:00',null,4);
-insert into orders values (112,'Mission Hill Vineyards','2017-11-01 12:00','2017-11-05 10:00',4);
+insert into orders values (112,'Mission Hill','2017-11-01 12:00','2017-11-05 10:00',4);
 insert into orders values (113,'Jackson Triggs','2017-11-01 12:00','2017-11-05 10:00',4);
 insert into orders values (114,'Naked Grape','2017-11-08 10:00','2017-11-10 12:00',4);
 insert into orders values (115,'Screw It','2017-11-15 10:00','2017-11-20 10:00',4);
