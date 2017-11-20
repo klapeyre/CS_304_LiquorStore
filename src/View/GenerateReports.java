@@ -56,19 +56,8 @@ public class GenerateReports {
                 String end_Date = generateEndDateField.getText();
                 Date startDate = Date.valueOf(start_Date);
                 Date endDate = Date.valueOf(end_Date);
-
-                if(wagesRadioButton.isSelected()){
-                    sqlGenerateReports.generateWagesReport(storeId, startDate, endDate);
-                    JOptionPane.showMessageDialog(null, "Wages report generated successfully!");
-                }
-                else if(ordersRadioButton.isSelected()){
-                    sqlGenerateReports.generateOrdersReport(storeId, startDate, endDate);
-                    JOptionPane.showMessageDialog(null, "Orders report generated successfully!");
-                }
-                else if(salesRadioButton.isSelected()){
-                    sqlGenerateReports.generateSalesReport(storeId, startDate, endDate);
-                    JOptionPane.showMessageDialog(null, "Sales report generated successfully!");
-                }
+                sqlGenerateReports.generateReport(storeId, startDate, endDate);
+                JOptionPane.showMessageDialog(null, "Report generated successfully!");
             }
         });
 
