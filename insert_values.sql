@@ -140,7 +140,7 @@ insert into saleitems values (1023,103,1);
 
 commit;
 
-insert into reports values (1,'2017-11-05','2017-11-05',1,85.61,0.00,0.00);
+insert into reports values (1,'2017-11-05','2017-11-05',1,85.61,0.00,170.00);
 
 
 
