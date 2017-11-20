@@ -69,9 +69,16 @@ public class SQLGenerateReports {
 
     public void generateReport(int storeId, Date startDate, Date endDate) {
         long diff = Math.abs(endDate.getTime() - startDate.getTime());
-        long numberOfDaysWorked = diff / (24 * 60 * 60 * 1000);
+        // include the date a report was generated on in wages
+        long numberOfDaysWorked = diff / (24 * 60 * 60 * 1000) + 1;
         PreparedStatement ps;
         ResultSet wages, orders, sales;
+        String date = null;
+        if (startDate.toString().equals(endDate.toString())) {
+            date = startDate.toString().substring(2, startDate.toString().length());
+            date = '%' + date + '%';
+        }
+
         try {
             // obtain wages information
             ps = con.prepareStatement("SELECT E.STORE_ID, SUM(E.SALARY * ?) " +
@@ -98,18 +105,31 @@ public class SQLGenerateReports {
             orders = ps.executeQuery();
 
             // obtain sales information
-            ps = con.prepareStatement("SELECT E.STORE_ID, " +
-                    "SUM(S.TOTAL_PRICE) AS \"SALES TOTAL\" " +
-                    "FROM STORE_SALES S, EMPLOYEES E " +
-                    "WHERE E.STORE_ID = ? AND " +
-                    "S.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
-                    "S.SALE_DATE >= ? AND " +
-                    "S.SALE_DATE <= ? " +
-                    "GROUP BY E.STORE_ID");
-            ps.setInt(1, storeId);
-            ps.setDate(2, startDate);
-            ps.setDate(3, endDate);
-            sales = ps.executeQuery();
+            if (startDate.toString().equals(endDate.toString())) {
+                ps = con.prepareStatement("SELECT E.STORE_ID, " +
+                        "SUM(S.TOTAL_PRICE) AS \"SALES TOTAL\" " +
+                        "FROM STORE_SALES S, EMPLOYEES E " +
+                        "WHERE E.STORE_ID = ? AND " +
+                        "S.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
+                        "S.SALE_DATE LIKE ? " +
+                        "GROUP BY E.STORE_ID");
+                ps.setInt(1, storeId);
+                ps.setString(2, date);
+                sales = ps.executeQuery();
+            } else{
+                ps = con.prepareStatement("SELECT E.STORE_ID, " +
+                        "SUM(S.TOTAL_PRICE) AS \"SALES TOTAL\" " +
+                        "FROM STORE_SALES S, EMPLOYEES E " +
+                        "WHERE E.STORE_ID = ? AND " +
+                        "S.EMPLOYEE_ID = E.EMPLOYEE_ID AND " +
+                        "S.SALE_DATE >= ? AND " +
+                        "S.SALE_DATE <= ? " +
+                        "GROUP BY E.STORE_ID");
+                ps.setInt(1, storeId);
+                ps.setDate(2, startDate);
+                ps.setDate(3, endDate);
+                sales = ps.executeQuery();
+            }
             addReport(wages, orders, sales, storeId, startDate, endDate);
             ps.close();
         } catch (SQLException e) {
